@@ -70,8 +70,9 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
     }
 
     final success = await ref.read(authProvider.notifier).confirmPasswordReset(
-          widget.code ?? '',
-          password,
+          email: widget.email ?? '',
+          code: widget.code ?? '',
+          newPassword: password,
         );
 
     if (mounted) {

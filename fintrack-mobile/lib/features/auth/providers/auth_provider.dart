@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../core/services/auth_api_service.dart';
 
 class AuthState {
   final String? token;
@@ -15,6 +16,9 @@ class AuthState {
 }
 
 class AuthNotifier extends Notifier<AuthState> {
+  // Using localhost for emulator/testing
+  final String baseUrl = 'http://localhost:8000';
+
   @override
   AuthState build() {
     return AuthState();
@@ -37,11 +41,16 @@ class AuthNotifier extends Notifier<AuthState> {
       return false;
     }
 
-    // Stub: simulate network delay
-    await Future.delayed(const Duration(milliseconds: 800));
-
-    state = AuthState(token: 'stub_mock_jwt_token_12345');
-    return true;
+    try {
+      final api = AuthApiService(baseUrl: baseUrl);
+      final res = await api.login(email, password);
+      final token = res['access_token'] as String?;
+      state = AuthState(token: token);
+      return true;
+    } catch (e) {
+      state = AuthState(error: _formatError(e));
+      return false;
+    }
   }
 
   Future<bool> register(String email, String password, String confirmPassword) async {
@@ -64,11 +73,15 @@ class AuthNotifier extends Notifier<AuthState> {
       return false;
     }
 
-    // Stub: simulate network delay
-    await Future.delayed(const Duration(milliseconds: 800));
-
-    state = AuthState();
-    return true;
+    try {
+      final api = AuthApiService(baseUrl: baseUrl);
+      await api.register(email, password);
+      state = AuthState();
+      return true;
+    } catch (e) {
+      state = AuthState(error: _formatError(e));
+      return false;
+    }
   }
 
   Future<bool> requestPasswordReset(String email) async {
@@ -79,12 +92,22 @@ class AuthNotifier extends Notifier<AuthState> {
       return false;
     }
 
-    await Future.delayed(const Duration(milliseconds: 800));
-    state = AuthState();
-    return true;
+    try {
+      final api = AuthApiService(baseUrl: baseUrl);
+      await api.requestPasswordReset(email);
+      state = AuthState();
+      return true;
+    } catch (e) {
+      state = AuthState(error: _formatError(e));
+      return false;
+    }
   }
 
-  Future<bool> confirmPasswordReset(String code, String newPassword) async {
+  Future<bool> confirmPasswordReset({
+    required String email,
+    required String code,
+    required String newPassword,
+  }) async {
     state = AuthState(isLoading: true);
 
     if (code.trim().isEmpty) {
@@ -96,9 +119,15 @@ class AuthNotifier extends Notifier<AuthState> {
       return false;
     }
 
-    await Future.delayed(const Duration(milliseconds: 800));
-    state = AuthState();
-    return true;
+    try {
+      final api = AuthApiService(baseUrl: baseUrl);
+      await api.confirmPasswordReset(email, code, newPassword);
+      state = AuthState();
+      return true;
+    } catch (e) {
+      state = AuthState(error: _formatError(e));
+      return false;
+    }
   }
 
   void logout() {
@@ -107,6 +136,14 @@ class AuthNotifier extends Notifier<AuthState> {
 
   void clearError() {
     state = AuthState(token: state.token, isLoading: state.isLoading);
+  }
+
+  String _formatError(dynamic e) {
+    final str = e.toString();
+    if (str.startsWith('Exception: ')) {
+      return str.substring('Exception: '.length);
+    }
+    return str;
   }
 }
 

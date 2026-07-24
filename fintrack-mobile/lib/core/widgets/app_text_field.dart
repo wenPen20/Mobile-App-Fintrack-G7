@@ -42,9 +42,8 @@ class AppTextField extends StatelessWidget {
         TextField(
           controller: controller,
           keyboardType: keyboardType,
-          // BUG: obscureText is hardcoded to false — the isObscure field is
-          // never used, so the password visibility toggle has no effect.
-          obscureText: false,
+          // FIXED: wire isObscure so toggle actually controls text visibility
+          obscureText: isObscure,
           decoration: InputDecoration(
             hintText: hintText,
             errorText: errorText,

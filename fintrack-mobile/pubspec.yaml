@@ -41,6 +41,9 @@ dependencies:
   # Declarative routing + auth guard
   go_router: ^14.6.3
 
+  # Device preview frame simulation
+  device_preview: ^1.2.0
+
   # HTTP client for backend API calls (used in Phase 3)
   http: ^1.2.2
 

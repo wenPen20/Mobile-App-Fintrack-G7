@@ -1,6 +1,13 @@
+import os
+from jose import jwt, JWTError
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from pydantic import BaseModel
+from dotenv import load_dotenv
+
+# Load env variables from fintrack-api/.env
+load_dotenv(".env")
+JWT_SECRET = os.getenv("JWT_SECRET")
 
 security = HTTPBearer()
 
@@ -12,8 +19,7 @@ async def get_current_user(
     credentials: HTTPAuthorizationCredentials = Depends(security)
 ) -> AuthUser:
     """
-    Dependency to extract and validate the JWT Bearer token.
-    Replace/wire with your JWT verification library or Supabase auth decoder.
+    Extract and validate the JWT Bearer token against Supabase's signature using JWT_SECRET.
     """
     token = credentials.credentials
     if not token:
@@ -23,8 +29,19 @@ async def get_current_user(
             headers={"WWW-Authenticate": "Bearer"},
         )
     
-    # Example decoding logic:
-    # payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-    # return AuthUser(id=payload.get("sub"), email=payload.get("email"))
-
-    return AuthUser(id="demo-user-id", email="user@example.com")
+    try:
+        # Supabase JWTs are signed with HS256 and the project JWT secret
+        payload = jwt.decode(token, JWT_SECRET, algorithms=["HS256"], audience="authenticated")
+        user_id = payload.get("sub")
+        email = payload.get("email")
+        if not user_id or not email:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid token claims",
+            )
+        return AuthUser(id=user_id, email=email)
+    except JWTError as e:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail=f"Invalid token: {str(e)}",
+        )

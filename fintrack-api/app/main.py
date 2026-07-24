@@ -13,8 +13,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# BUG: double prefix — router already defines prefix="/auth" internally
-app.include_router(auth_router.router, prefix="/auth", tags=["Auth"])
+# FIXED: router already carries prefix="/auth"
+app.include_router(auth_router.router, tags=["Auth"])
 
 @app.get("/")
 def read_root():

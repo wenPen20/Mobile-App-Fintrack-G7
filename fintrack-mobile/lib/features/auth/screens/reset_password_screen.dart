@@ -60,9 +60,14 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
       return;
     }
     
-    // INTENTIONAL BUG: confirmPassword is not validated to match password!
-    // We intentionally omit:
-    // if (confirmPassword != password) { ... }
+    // FIXED: validate that confirmPassword matches password before proceeding
+    if (confirmPassword != password) {
+      setState(() {
+        _confirmPasswordError = 'Passwords do not match';
+        _passwordError = 'Passwords do not match';
+      });
+      return;
+    }
 
     final success = await ref.read(authProvider.notifier).confirmPasswordReset(
           widget.code ?? '',

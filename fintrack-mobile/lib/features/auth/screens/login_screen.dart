@@ -5,7 +5,7 @@ import '../../../core/widgets/app_button.dart';
 import '../../../core/widgets/auth_error_banner.dart';
 import '../../../core/widgets/app_text_field.dart';
 import 'register_screen.dart';
-// import 'forget_password_screen.dart';
+import 'forget_password_screen.dart';
 
 
 class LoginScreen extends ConsumerStatefulWidget {
@@ -153,7 +153,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         minimumSize: Size.zero,
                         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                       ),
-                      onPressed: null,
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const ForgetPasswordScreen(),
+                          ),
+                        );
+                      },
                       child: const Text('Forgot Password?'),
                     ),
                   ],

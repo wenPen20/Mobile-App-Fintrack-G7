@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+
 import '../../features/auth/providers/auth_provider.dart';
 import '../../features/auth/screens/login_screen.dart';
 import '../../features/auth/screens/register_screen.dart';
 import '../../features/auth/screens/forget_password_screen.dart';
 import '../../features/auth/screens/reset_password_screen.dart';
+import '../../shared/navigation/app_shell.dart';
+
+final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'root');
+final GlobalKey<NavigatorState> _shellNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'shell');
 
 // Helper class to make GoRouter react to Riverpod AuthState changes
 class AuthListenable extends ChangeNotifier {
@@ -23,6 +28,7 @@ final routerProvider = Provider<GoRouter>((ref) {
   final authListenable = AuthListenable(ref);
 
   return GoRouter(
+    navigatorKey: _rootNavigatorKey,
     initialLocation: '/login',
     refreshListenable: authListenable,
     redirect: (BuildContext context, GoRouterState state) {
@@ -37,7 +43,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       }
 
       if (isAuth && isAuthRoute) {
-        return '/home'; // Navigate to main dashboard when logged in
+        return '/home'; // Navigate to main dashboard shell when logged in
       }
 
       return null;
@@ -59,11 +65,55 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/reset-password',
         builder: (context, state) => const ResetPasswordScreen(),
       ),
+      ShellRoute(
+        navigatorKey: _shellNavigatorKey,
+        builder: (context, state, child) {
+          return AppShell(
+            currentLocation: state.uri.toString(),
+            child: child,
+          );
+        },
+        routes: [
+          GoRoute(
+            path: '/home',
+            builder: (context, state) => const Scaffold(
+              body: Center(
+                child: Text('Dashboard Screen (Home Tab)'),
+              ),
+            ),
+          ),
+          GoRoute(
+            path: '/transactions',
+            builder: (context, state) => const Scaffold(
+              body: Center(
+                child: Text('Transactions Screen (Tab)'),
+              ),
+            ),
+          ),
+          GoRoute(
+            path: '/budget',
+            builder: (context, state) => const Scaffold(
+              body: Center(
+                child: Text('Budget Screen (Tab)'),
+              ),
+            ),
+          ),
+          GoRoute(
+            path: '/profile',
+            builder: (context, state) => const Scaffold(
+              body: Center(
+                child: Text('Profile Screen (Tab)'),
+              ),
+            ),
+          ),
+        ],
+      ),
       GoRoute(
-        path: '/home',
+        path: '/add_transaction',
+        parentNavigatorKey: _rootNavigatorKey,
         builder: (context, state) => const Scaffold(
           body: Center(
-            child: Text('Home Screen (Protected Route)'),
+            child: Text('Add Transaction Screen Modal'),
           ),
         ),
       ),

@@ -4,9 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'core/router/app_router.dart';
 
 /// Root application widget.
-///
-/// Uses [ConsumerWidget] so it can later consume the [routerProvider]
-/// from core/router/app_router.dart once routing is configured (Commit 10).
 class App extends ConsumerWidget {
   const App({super.key});
 
@@ -17,7 +14,6 @@ class App extends ConsumerWidget {
     return MaterialApp.router(
       title: 'FinTrack',
       routerConfig: router,
-      useInheritedMediaQuery: true,
       locale: DevicePreview.locale(context),
       builder: DevicePreview.appBuilder,
       debugShowCheckedModeBanner: false,
@@ -28,4 +24,3 @@ class App extends ConsumerWidget {
     );
   }
 }
-

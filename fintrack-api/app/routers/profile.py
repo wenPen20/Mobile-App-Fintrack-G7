@@ -63,9 +63,17 @@ async def get_profile(
                 if p.get("full_name"):
                     full_name = p.get("full_name")
                 if p.get("monthly_income") is not None:
-                    monthly_income = float(p.get("monthly_income"))
+                    raw_inc = p.get("monthly_income")
+                    if isinstance(raw_inc, list):
+                        monthly_income = sum(float(x) for x in raw_inc if x is not None)
+                    else:
+                        monthly_income = float(raw_inc)
                 if p.get("fixed_expenses") is not None:
-                    fixed_expenses = float(p.get("fixed_expenses"))
+                    raw_exp = p.get("fixed_expenses")
+                    if isinstance(raw_exp, list):
+                        fixed_expenses = sum(float(x) for x in raw_exp if x is not None)
+                    else:
+                        fixed_expenses = float(raw_exp)
                 if p.get("income_frequency"):
                     income_frequency = p.get("income_frequency")
                 if p.get("risk_appetite"):

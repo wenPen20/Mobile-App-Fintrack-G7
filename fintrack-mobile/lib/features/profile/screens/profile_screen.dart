@@ -130,13 +130,41 @@ class ProfileScreen extends ConsumerWidget {
             ),
             const SizedBox(height: 24),
 
-            // Account & Preferences Section
+            // Account Section (Prepared for clickable options)
             _SettingsSection(
-              title: 'Account & Preferences',
+              title: 'Account',
+              children: [
+                _SettingsTile(
+                  icon: Icons.person_outline,
+                  title: 'Personal Details',
+                  subtitle: 'View and manage profile information',
+                  onTap: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Personal Details screen coming soon')),
+                    );
+                  },
+                ),
+                _SettingsTile(
+                  icon: Icons.lock_outline,
+                  title: 'Security (Password Change)',
+                  subtitle: 'Update or change your account password',
+                  onTap: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Security & Password Change screen coming soon')),
+                    );
+                  },
+                ),
+              ],
+            ),
+            const SizedBox(height: 24),
+
+            // Preferences & Onboarding Section
+            _SettingsSection(
+              title: 'Preferences & Onboarding',
               children: [
                 _SettingsTile(
                   icon: Icons.rocket_launch_outlined,
-                  title: 'Onboarding & Quick Setup',
+                  title: 'Quick Setup',
                   subtitle: 'Re-run initial preferences wizard',
                   onTap: () => context.push('/onboarding'),
                 ),
@@ -150,9 +178,9 @@ class ProfileScreen extends ConsumerWidget {
             ),
             const SizedBox(height: 24),
 
-            // Security & Session Section
+            // Account Session Section
             _SettingsSection(
-              title: 'Security & Session',
+              title: 'Account Session',
               children: [
                 _SettingsTile(
                   icon: Icons.logout_rounded,

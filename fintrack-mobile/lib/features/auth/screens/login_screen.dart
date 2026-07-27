@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import '../../../core/services/api_service.dart';
 import '../providers/auth_provider.dart';
 import '../../../core/widgets/app_button.dart';
 import '../../../core/widgets/auth_error_banner.dart';
@@ -62,10 +64,22 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
     if (mounted) {
       if (success) {
-        // Once GoRouter is configured, it will auto-redirect based on authState.
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Login successful!')),
-        );
+        try {
+          final api = ref.read(apiServiceProvider);
+          final profile = await api.getProfile();
+          final onboardingDone = profile['onboarding_completed'] == true || profile['onboarding_done'] == true;
+          if (mounted) {
+            if (onboardingDone) {
+              context.go('/home');
+            } else {
+              context.go('/onboarding');
+            }
+          }
+        } catch (_) {
+          if (mounted) {
+            context.go('/onboarding');
+          }
+        }
       } else {
         final authState = ref.read(authProvider);
         setState(() {

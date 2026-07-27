@@ -146,11 +146,11 @@ class ProfileScreen extends ConsumerWidget {
                 ),
                 _SettingsTile(
                   icon: Icons.lock_outline,
-                  title: 'Security (Password Change)',
+                  title: 'Security Settings',
                   subtitle: 'Update or change your account password',
                   onTap: () {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Security & Password Change screen coming soon')),
+                      const SnackBar(content: Text('Security Settings screen coming soon')),
                     );
                   },
                 ),

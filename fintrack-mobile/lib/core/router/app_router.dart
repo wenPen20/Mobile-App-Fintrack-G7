@@ -35,7 +35,9 @@ final routerProvider = Provider<GoRouter>((ref) {
     initialLocation: '/login',
     refreshListenable: authListenable,
     redirect: (BuildContext context, GoRouterState state) {
-      final isAuth = ref.read(authProvider).isAuthenticated;
+      final authState = ref.read(authProvider);
+      final isAuth = authState.isAuthenticated;
+      final onboardingDone = authState.onboardingCompleted;
       final isAuthRoute = state.matchedLocation.startsWith('/login') ||
           state.matchedLocation.startsWith('/register') ||
           state.matchedLocation.startsWith('/forget-password') ||
@@ -46,7 +48,11 @@ final routerProvider = Provider<GoRouter>((ref) {
       }
 
       if (isAuth && isAuthRoute) {
-        return '/home'; // Navigate to main dashboard shell when logged in
+        return onboardingDone ? '/home' : '/onboarding';
+      }
+
+      if (isAuth && !onboardingDone && !state.matchedLocation.startsWith('/onboarding')) {
+        return '/onboarding';
       }
 
       return null;

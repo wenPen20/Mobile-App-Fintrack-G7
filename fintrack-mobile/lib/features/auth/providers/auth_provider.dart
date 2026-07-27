@@ -1,18 +1,35 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../core/services/api_service.dart';
 import '../../../core/services/auth_api_service.dart';
 
 class AuthState {
   final String? token;
   final String? error;
   final bool isLoading;
+  final bool onboardingCompleted;
 
   AuthState({
     this.token,
     this.error,
     this.isLoading = false,
+    this.onboardingCompleted = false,
   });
 
   bool get isAuthenticated => token != null;
+
+  AuthState copyWith({
+    String? token,
+    String? error,
+    bool? isLoading,
+    bool? onboardingCompleted,
+  }) {
+    return AuthState(
+      token: token ?? this.token,
+      error: error,
+      isLoading: isLoading ?? this.isLoading,
+      onboardingCompleted: onboardingCompleted ?? this.onboardingCompleted,
+    );
+  }
 }
 
 class AuthNotifier extends Notifier<AuthState> {
@@ -22,6 +39,10 @@ class AuthNotifier extends Notifier<AuthState> {
   @override
   AuthState build() {
     return AuthState();
+  }
+
+  void setOnboardingCompleted(bool completed) {
+    state = state.copyWith(onboardingCompleted: completed);
   }
 
   Future<bool> login(String email, String password) async {
@@ -45,7 +66,19 @@ class AuthNotifier extends Notifier<AuthState> {
       final api = AuthApiService(baseUrl: baseUrl);
       final res = await api.login(email, password);
       final token = res['access_token'] as String?;
-      state = AuthState(token: token);
+
+      bool onboardingDone = false;
+      if (token != null) {
+        try {
+          final apiService = ApiService(baseUrl: baseUrl, token: token);
+          final profile = await apiService.getProfile();
+          onboardingDone = profile['onboarding_completed'] == true || profile['onboarding_done'] == true;
+        } catch (_) {
+          onboardingDone = false;
+        }
+      }
+
+      state = AuthState(token: token, onboardingCompleted: onboardingDone);
       return true;
     } catch (e) {
       state = AuthState(error: _formatError(e));
@@ -76,7 +109,7 @@ class AuthNotifier extends Notifier<AuthState> {
     try {
       final api = AuthApiService(baseUrl: baseUrl);
       await api.register(email, password);
-      state = AuthState();
+      state = AuthState(onboardingCompleted: false);
       return true;
     } catch (e) {
       state = AuthState(error: _formatError(e));
@@ -135,7 +168,11 @@ class AuthNotifier extends Notifier<AuthState> {
   }
 
   void clearError() {
-    state = AuthState(token: state.token, isLoading: state.isLoading);
+    state = AuthState(
+      token: state.token,
+      isLoading: state.isLoading,
+      onboardingCompleted: state.onboardingCompleted,
+    );
   }
 
   String _formatError(dynamic e) {

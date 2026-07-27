@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/services/api_service.dart';
+import '../../auth/providers/auth_provider.dart';
 import '../../dashboard/providers/dashboard_provider.dart';
 
 class OnboardingTransactionItem {
@@ -146,7 +147,8 @@ class OnboardingNotifier extends Notifier<OnboardingState> {
         'risk_appetite': state.riskAppetite,
       });
 
-      // Refresh dashboard providers
+      // Mark onboarding as completed in auth state & refresh providers
+      ref.read(authProvider.notifier).setOnboardingCompleted(true);
       ref.invalidate(profileProvider);
       ref.invalidate(budgetSummaryProvider(now));
 

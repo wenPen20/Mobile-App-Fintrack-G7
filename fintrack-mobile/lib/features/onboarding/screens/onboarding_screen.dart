@@ -7,11 +7,25 @@ import '../widgets/onboarding_step_profile.dart';
 import '../widgets/onboarding_step_budgets.dart';
 import '../widgets/onboarding_step_summary.dart';
 
-class OnboardingScreen extends ConsumerWidget {
+class OnboardingScreen extends ConsumerStatefulWidget {
   const OnboardingScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<OnboardingScreen> createState() => _OnboardingScreenState();
+}
+
+class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
+  @override
+  void initState() {
+    super.initState();
+    // Always reset wizard to Step 1 whenever OnboardingScreen opens
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(onboardingProvider.notifier).resetStep();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final onboarding = ref.watch(onboardingProvider);
     final notifier = ref.read(onboardingProvider.notifier);
 

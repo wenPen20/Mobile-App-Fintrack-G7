@@ -8,6 +8,9 @@ from app.core.dependencies import get_current_user
 router = APIRouter()
 security = HTTPBearer()
 
+# In-memory profile cache for local development/testing when Supabase table is absent
+_user_profiles_cache: dict[str, dict] = {}
+
 class UpdateNameRequest(BaseModel):
     name: str
 
@@ -26,13 +29,15 @@ async def get_profile(
     db = Depends(get_supabase)
 ):
     user_id_str = str(user.id)
-    full_name = "User"
-    monthly_income = 0.0
-    income_frequency = "monthly"
-    risk_appetite = "moderate"
-    financial_goal = "Track Expenses & Save"
-    fixed_expenses = 0.0
-    onboarding_done = False
+    cached = _user_profiles_cache.get(user_id_str, {})
+
+    full_name = cached.get("name", "User")
+    monthly_income = cached.get("monthly_income", 0.0)
+    income_frequency = cached.get("income_frequency", "monthly")
+    risk_appetite = cached.get("risk_appetite", "moderate")
+    financial_goal = cached.get("financial_goal", "Track Expenses & Save")
+    fixed_expenses = cached.get("fixed_expenses", 0.0)
+    onboarding_done = cached.get("onboarding_done", False)
 
     # Attempt to query profiles table if DB client is available
     if db is not None:
@@ -76,6 +81,9 @@ async def update_name(
     db = Depends(get_supabase)
 ):
     user_id_str = str(user.id)
+    cached = _user_profiles_cache.setdefault(user_id_str, {})
+    cached["name"] = data.name
+
     if db is not None:
         try:
             db.table("profiles").upsert({
@@ -97,6 +105,13 @@ async def update_onboarding(
     db = Depends(get_supabase)
 ):
     user_id_str = str(user.id)
+    cached = _user_profiles_cache.setdefault(user_id_str, {})
+    cached["onboarding_done"] = data.onboarding_completed
+    if data.name:
+        cached["name"] = data.name
+    if data.monthly_income_target is not None:
+        cached["monthly_income"] = data.monthly_income_target
+
     if db is not None:
         try:
             db_payload = {

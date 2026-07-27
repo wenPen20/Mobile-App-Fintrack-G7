@@ -39,6 +39,34 @@ class ApiService {
     }
   }
 
+  Future<Map<String, dynamic>> createTransaction(Map<String, dynamic> data) async {
+    final response = await http.post(
+      Uri.parse('$baseUrl/transactions/'),
+      headers: _headers,
+      body: jsonEncode(data),
+    );
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return jsonDecode(response.body) as Map<String, dynamic>;
+    } else {
+      return {};
+    }
+  }
+
+  // --- Categories ---
+  Future<List<dynamic>> getCategories() async {
+    final response = await http.get(
+      Uri.parse('$baseUrl/categories/'),
+      headers: _headers,
+    );
+
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body) as List<dynamic>;
+    } else {
+      return [];
+    }
+  }
+
   // --- Budgets ---
   Future<List<dynamic>> getBudgets({int? month, int? year}) async {
     final queryParams = <String, String>{};
@@ -75,7 +103,7 @@ class ApiService {
     }
   }
 
-  // --- Profile ---
+  // --- Profile & Onboarding ---
   Future<Map<String, dynamic>> getProfile() async {
     final response = await http.get(
       Uri.parse('$baseUrl/profile/'),
@@ -85,8 +113,24 @@ class ApiService {
     if (response.statusCode == 200) {
       return jsonDecode(response.body) as Map<String, dynamic>;
     } else {
-      return {'name': 'User'};
+      return {'name': 'User', 'onboarding_completed': true};
     }
+  }
+
+  Future<void> updateName(String name) async {
+    await http.put(
+      Uri.parse('$baseUrl/profile/update-name'),
+      headers: _headers,
+      body: jsonEncode({'name': name}),
+    );
+  }
+
+  Future<void> updateOnboarding(Map<String, dynamic> data) async {
+    await http.put(
+      Uri.parse('$baseUrl/profile/update-onboarding'),
+      headers: _headers,
+      body: jsonEncode(data),
+    );
   }
 }
 

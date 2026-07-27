@@ -14,6 +14,7 @@ security = HTTPBearer()
 class AuthUser(BaseModel):
     id: str
     email: str
+    user_metadata: dict = {}
 
 async def get_current_user(
     credentials: HTTPAuthorizationCredentials = Depends(security)
@@ -34,12 +35,13 @@ async def get_current_user(
         payload = jwt.decode(token, JWT_SECRET, algorithms=["HS256"], audience="authenticated")
         user_id = payload.get("sub")
         email = payload.get("email")
+        user_meta = payload.get("user_metadata") or {}
         if not user_id or not email:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Invalid token claims",
             )
-        return AuthUser(id=user_id, email=email)
+        return AuthUser(id=user_id, email=email, user_metadata=user_meta)
     except JWTError as e:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,

@@ -39,14 +39,27 @@ async def get_profile(
     fixed_expenses = cached.get("fixed_expenses", 0.0)
     onboarding_done = cached.get("onboarding_done", False)
 
-    # Attempt to query profiles table if DB client is available
+    # 1. Check user_metadata attached to JWT user payload
+    metadata = getattr(user, "user_metadata", {}) or {}
+    if isinstance(metadata, dict):
+        if "onboarding_completed" in metadata:
+            onboarding_done = bool(metadata["onboarding_completed"])
+        elif "onboarding_done" in metadata:
+            onboarding_done = bool(metadata["onboarding_done"])
+        if metadata.get("full_name"):
+            full_name = metadata.get("full_name")
+
+    # 2. Query profiles table in Supabase DB (supports both onboarding_completed and onboarding_done columns)
     if db is not None:
         try:
             res = db.table("profiles").select("*").eq("id", user_id_str).execute()
             if res.data and len(res.data) > 0:
                 p = res.data[0]
-                if p.get("onboarding_done") is not None:
+                if p.get("onboarding_completed") is not None:
+                    onboarding_done = bool(p.get("onboarding_completed"))
+                elif p.get("onboarding_done") is not None:
                     onboarding_done = bool(p.get("onboarding_done"))
+                
                 if p.get("full_name"):
                     full_name = p.get("full_name")
                 if p.get("monthly_income") is not None:
@@ -116,6 +129,7 @@ async def update_onboarding(
         try:
             db_payload = {
                 "id": user_id_str,
+                "onboarding_completed": data.onboarding_completed,
                 "onboarding_done": data.onboarding_completed,
             }
             if data.name:

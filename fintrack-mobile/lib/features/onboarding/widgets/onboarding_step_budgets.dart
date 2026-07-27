@@ -139,7 +139,7 @@ class _OnboardingStepBudgetsState extends ConsumerState<OnboardingStepBudgets> {
                 child: OutlinedButton(
                   onPressed: widget.onBack,
                   style: OutlinedButton.styleFrom(
-                    height: 50,
+                    minimumSize: const Size.fromHeight(50),
                     side: const BorderSide(color: AppColors.border),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                   ),
@@ -159,7 +159,7 @@ class _OnboardingStepBudgetsState extends ConsumerState<OnboardingStepBudgets> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primary,
                     foregroundColor: Colors.white,
-                    height: 50,
+                    minimumSize: const Size.fromHeight(50),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                   ),
                   child: const Text('Review Setup', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),

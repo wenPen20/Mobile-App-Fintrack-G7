@@ -8,6 +8,8 @@ import '../../features/auth/screens/register_screen.dart';
 import '../../features/auth/screens/forget_password_screen.dart';
 import '../../features/auth/screens/reset_password_screen.dart';
 import '../../features/dashboard/screens/dashboard_screen.dart';
+import '../../features/onboarding/screens/onboarding_screen.dart';
+import '../../features/profile/screens/profile_screen.dart';
 import '../../shared/navigation/app_shell.dart';
 
 final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'root');
@@ -66,6 +68,11 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/reset-password',
         builder: (context, state) => const ResetPasswordScreen(),
       ),
+      GoRoute(
+        path: '/onboarding',
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (context, state) => const OnboardingScreen(),
+      ),
       ShellRoute(
         navigatorKey: _shellNavigatorKey,
         builder: (context, state, child) {
@@ -97,11 +104,7 @@ final routerProvider = Provider<GoRouter>((ref) {
           ),
           GoRoute(
             path: '/profile',
-            builder: (context, state) => const Scaffold(
-              body: Center(
-                child: Text('Profile Screen (Tab)'),
-              ),
-            ),
+            builder: (context, state) => const ProfileScreen(),
           ),
         ],
       ),
@@ -111,6 +114,16 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const Scaffold(
           body: Center(
             child: Text('Add Transaction Screen Modal'),
+          ),
+        ),
+      ),
+      GoRoute(
+        path: '/categories',
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (context, state) => Scaffold(
+          appBar: AppBar(title: const Text('Categories')),
+          body: const Center(
+            child: Text('Category Management feature coming soon'),
           ),
         ),
       ),

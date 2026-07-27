@@ -7,6 +7,7 @@ import '../../features/auth/screens/login_screen.dart';
 import '../../features/auth/screens/register_screen.dart';
 import '../../features/auth/screens/forget_password_screen.dart';
 import '../../features/auth/screens/reset_password_screen.dart';
+import '../../features/dashboard/screens/dashboard_screen.dart';
 import '../../shared/navigation/app_shell.dart';
 
 final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'root');
@@ -76,11 +77,7 @@ final routerProvider = Provider<GoRouter>((ref) {
         routes: [
           GoRoute(
             path: '/home',
-            builder: (context, state) => const Scaffold(
-              body: Center(
-                child: Text('Dashboard Screen (Home Tab)'),
-              ),
-            ),
+            builder: (context, state) => const DashboardScreen(),
           ),
           GoRoute(
             path: '/transactions',

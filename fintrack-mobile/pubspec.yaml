@@ -47,6 +47,9 @@ dependencies:
   # HTTP client for backend API calls (used in Phase 3)
   http: ^1.2.2
 
+  # Chart library for financial dashboard analytics
+  fl_chart: ^0.69.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

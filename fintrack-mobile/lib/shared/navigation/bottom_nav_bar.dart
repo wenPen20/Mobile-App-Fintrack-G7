@@ -183,11 +183,11 @@ class _CenterAddButton extends StatelessWidget {
           width: 50,
           height: 50,
           decoration: BoxDecoration(
-            color: AppColors.accent,
+            color: AppColors.primary,
             shape: BoxShape.circle,
             boxShadow: [
               BoxShadow(
-                color: AppColors.accent.withValues(alpha: 0.45),
+                color: AppColors.primary.withValues(alpha: 0.4),
                 blurRadius: 10,
                 offset: const Offset(0, 4),
               ),

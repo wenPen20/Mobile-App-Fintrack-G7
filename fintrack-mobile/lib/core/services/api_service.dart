@@ -113,7 +113,7 @@ class ApiService {
     if (response.statusCode == 200) {
       return jsonDecode(response.body) as Map<String, dynamic>;
     } else {
-      return {'name': 'User', 'onboarding_completed': true};
+      return {'name': 'User', 'onboarding_completed': false};
     }
   }
 

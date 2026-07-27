@@ -32,7 +32,7 @@ async def get_profile(
     risk_appetite = "moderate"
     financial_goal = "Track Expenses & Save"
     fixed_expenses = 0.0
-    onboarding_done = True
+    onboarding_done = False
 
     # Attempt to query profiles table if DB client is available
     if db is not None:

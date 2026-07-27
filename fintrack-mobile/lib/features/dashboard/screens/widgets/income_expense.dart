@@ -78,6 +78,7 @@ class IncomeExpenseCard extends ConsumerWidget {
             height: 180,
             child: LineChart(
               LineChartData(
+                minY: 0,
                 gridData: const FlGridData(show: false),
                 borderData: FlBorderData(show: false),
                 titlesData: FlTitlesData(
@@ -106,6 +107,7 @@ class IncomeExpenseCard extends ConsumerWidget {
                   LineChartBarData(
                     spots: safeIncomeSpots,
                     isCurved: true,
+                    preventCurveOverShooting: true,
                     color: AppColors.primary,
                     barWidth: 3,
                     dotData: const FlDotData(show: false),
@@ -117,6 +119,7 @@ class IncomeExpenseCard extends ConsumerWidget {
                   LineChartBarData(
                     spots: safeExpenseSpots,
                     isCurved: true,
+                    preventCurveOverShooting: true,
                     color: Colors.redAccent,
                     barWidth: 3,
                     dotData: const FlDotData(show: false),

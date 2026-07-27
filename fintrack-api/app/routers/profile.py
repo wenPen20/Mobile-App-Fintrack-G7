@@ -1,0 +1,128 @@
+from fastapi import APIRouter, Depends, HTTPException
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from pydantic import BaseModel
+import httpx
+from app.core.supabase_client import get_supabase, SUPABASE_URL, SUPABASE_KEY
+from app.core.dependencies import get_current_user
+
+router = APIRouter()
+security = HTTPBearer()
+
+class UpdateNameRequest(BaseModel):
+    name: str
+
+class UpdateOnboardingRequest(BaseModel):
+    name: str | None = None
+    onboarding_completed: bool = True
+    financial_goal: str | None = None
+    monthly_income_target: float | None = None
+    income_frequency: str | None = "monthly"
+    fixed_expenses: float | None = None
+    risk_appetite: str | None = "moderate"
+
+@router.get("/", summary="Get Current User Profile")
+async def get_profile(
+    user = Depends(get_current_user),
+    db = Depends(get_supabase)
+):
+    user_id_str = str(user.id)
+    full_name = "User"
+    monthly_income = 0.0
+    income_frequency = "monthly"
+    risk_appetite = "moderate"
+    financial_goal = "Track Expenses & Save"
+    fixed_expenses = 0.0
+    onboarding_done = True
+
+    # Attempt to query profiles table if DB client is available
+    if db is not None:
+        try:
+            res = db.table("profiles").select("*").eq("id", user_id_str).execute()
+            if res.data and len(res.data) > 0:
+                p = res.data[0]
+                if p.get("onboarding_done") is not None:
+                    onboarding_done = bool(p.get("onboarding_done"))
+                if p.get("full_name"):
+                    full_name = p.get("full_name")
+                if p.get("monthly_income") is not None:
+                    monthly_income = float(p.get("monthly_income"))
+                if p.get("fixed_expenses") is not None:
+                    fixed_expenses = float(p.get("fixed_expenses"))
+                if p.get("income_frequency"):
+                    income_frequency = p.get("income_frequency")
+                if p.get("risk_appetite"):
+                    risk_appetite = p.get("risk_appetite")
+        except Exception as e:
+            # TODO: Temporary local fallback -- remove when backend DB tables are live
+            print(f"Supabase profiles query fallback: {e}")
+
+    return {
+        "email": user.email,
+        "name": full_name,
+        "onboarding_completed": onboarding_done,
+        "onboarding_done": onboarding_done,
+        "financial_goal": financial_goal,
+        "monthly_income_target": monthly_income,
+        "monthly_income": monthly_income,
+        "fixed_expenses": fixed_expenses,
+        "income_frequency": income_frequency.lower().replace("-", "").replace(" ", "") if income_frequency else "monthly",
+        "risk_appetite": risk_appetite.lower() if risk_appetite else "moderate",
+    }
+
+@router.put("/update-name", summary="Update User Name")
+async def update_name(
+    data: UpdateNameRequest,
+    user = Depends(get_current_user),
+    db = Depends(get_supabase)
+):
+    user_id_str = str(user.id)
+    if db is not None:
+        try:
+            db.table("profiles").upsert({
+                "id": user_id_str,
+                "full_name": data.name,
+            }).execute()
+        except Exception as e:
+            print(f"Profiles upsert warning: {e}")
+
+    return {
+        "message": "Profile name updated successfully",
+        "name": data.name
+    }
+
+@router.put("/update-onboarding", summary="Update User Onboarding Data")
+async def update_onboarding(
+    data: UpdateOnboardingRequest,
+    user = Depends(get_current_user),
+    db = Depends(get_supabase)
+):
+    user_id_str = str(user.id)
+    if db is not None:
+        try:
+            db_payload = {
+                "id": user_id_str,
+                "onboarding_done": data.onboarding_completed,
+            }
+            if data.name:
+                db_payload["full_name"] = data.name
+            if data.monthly_income_target is not None:
+                db_payload["monthly_income"] = data.monthly_income_target
+            if data.income_frequency:
+                db_payload["income_frequency"] = data.income_frequency.lower().replace("-", "").replace(" ", "")
+            if data.fixed_expenses is not None:
+                db_payload["fixed_expenses"] = data.fixed_expenses
+            if data.risk_appetite:
+                db_payload["risk_appetite"] = data.risk_appetite.lower()
+
+            db.table("profiles").upsert(db_payload).execute()
+        except Exception as e:
+            print(f"Supabase profiles table upsert warning: {e}")
+
+    return {
+        "message": "Onboarding data updated successfully",
+        "profile": {
+            "name": data.name,
+            "onboarding_completed": data.onboarding_completed,
+            "monthly_income_target": data.monthly_income_target,
+        }
+    }

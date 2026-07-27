@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fintrack_mobile/core/constants/app_colors.dart';
@@ -8,6 +9,8 @@ import 'widgets/income_expense.dart';
 import 'widgets/spending_donut.dart';
 import 'widgets/budget_health.dart';
 import 'widgets/recent_transactions.dart';
+
+const _greetingEmojis = ['✨', '⚡', '🚀', '💳', '👋', '📊', '🔥', '🌟'];
 
 class DashboardScreen extends ConsumerWidget {
   const DashboardScreen({super.key});
@@ -20,6 +23,8 @@ class DashboardScreen extends ConsumerWidget {
       orElse: () => 'User',
     );
 
+    final String emoji = _greetingEmojis[Random().nextInt(_greetingEmojis.length)];
+
     return Scaffold(
       backgroundColor: AppColors.background,
       body: SafeArea(
@@ -29,9 +34,9 @@ class DashboardScreen extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Greeting header
-              Text('Good morning, $displayName 👋', style: AppTextStyles.headingLarge),
+              Text('Hi $displayName $emoji', style: AppTextStyles.headingLarge),
               const SizedBox(height: 4),
-              Text("Here's your financial summary", style: AppTextStyles.bodyMedium),
+              Text('Finance summary', style: AppTextStyles.bodyMedium),
               const SizedBox(height: 24),
 
               const NetBalanceCard(),

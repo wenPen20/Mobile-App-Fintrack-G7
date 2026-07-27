@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 class AppColors {
   AppColors._();
 
-  static const Color primary = Color(0xFF0F766E); // Deep teal
+  static const Color primary = Color(0xFF1A73E8); // Royal blue (matching Login & App Theme)
   static const Color secondary = Color(0xFF0EA5E9); // Bright sky blue
   static const Color background = Color(0xFFF8FAFC); // Off-white / Slate 50
   static const Color surface = Color(0xFFFFFFFF); // Pure white

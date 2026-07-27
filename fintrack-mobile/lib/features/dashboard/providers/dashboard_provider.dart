@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/services/api_service.dart';
 
-// Fetches the summary data for the last 6 months concurrently to generate charts
+// Fetches the summary data for the last 6 months concurrently to generate historical trend chart
 final dashboardTrendProvider = FutureProvider<List<Map<String, dynamic>>>((ref) async {
   final api = ref.watch(apiServiceProvider);
   final now = DateTime.now();
@@ -29,8 +29,13 @@ final profileProvider = FutureProvider<Map<String, dynamic>>((ref) async {
 
 final recentTransactionsProvider = FutureProvider<List<dynamic>>((ref) async {
   final api = ref.watch(apiServiceProvider);
-  final now = DateTime.now();
-  return api.getTransactions(month: now.month, year: now.year);
+  final txs = await api.getTransactions();
+  txs.sort((a, b) {
+    final dateA = DateTime.tryParse(a['transaction_date'] ?? '') ?? DateTime(1970);
+    final dateB = DateTime.tryParse(b['transaction_date'] ?? '') ?? DateTime(1970);
+    return dateB.compareTo(dateA); // Newest first
+  });
+  return txs.take(5).toList();
 });
 
 class BudgetModel {

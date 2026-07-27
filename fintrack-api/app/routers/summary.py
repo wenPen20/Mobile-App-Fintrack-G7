@@ -14,7 +14,7 @@ async def get_summary(
 ):
     try:
         if db is None:
-            # Fallback mock data when Supabase library or DB credentials are not present locally
+            # TODO: Temporary local fallback -- remove when backend DB tables and credentials are live
             return {
                 "period": f"{month}/{year}",
                 "total_income": 4500.00,
@@ -62,7 +62,7 @@ async def get_summary(
             "per_category_breakdown": per_category_breakdown
         }
     except Exception as e:
-        # Fallback to mock data rather than failing Uvicorn execution
+        # TODO: Temporary local fallback -- remove when backend DB tables and credentials are live
         return {
             "period": f"{month}/{year}",
             "total_income": 4500.00,

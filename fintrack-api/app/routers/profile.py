@@ -137,7 +137,6 @@ async def update_onboarding(
         try:
             db_payload = {
                 "id": user_id_str,
-                "onboarding_completed": data.onboarding_completed,
                 "onboarding_done": data.onboarding_completed,
             }
             if data.name:
@@ -151,7 +150,13 @@ async def update_onboarding(
             if data.risk_appetite:
                 db_payload["risk_appetite"] = data.risk_appetite.lower()
 
-            db.table("profiles").upsert(db_payload).execute()
+            try:
+                db.table("profiles").upsert(db_payload).execute()
+            except Exception:
+                # Fallback for schemas using onboarding_completed column name
+                db_payload.pop("onboarding_done", None)
+                db_payload["onboarding_completed"] = data.onboarding_completed
+                db.table("profiles").upsert(db_payload).execute()
         except Exception as e:
             print(f"Supabase profiles table upsert warning: {e}")
 

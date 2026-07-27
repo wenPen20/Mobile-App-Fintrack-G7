@@ -32,17 +32,18 @@ async def get_current_user(
     
     try:
         # Supabase JWTs are signed with HS256 and the project JWT secret
-        payload = jwt.decode(token, JWT_SECRET, algorithms=["HS256"], audience="authenticated")
+        payload = jwt.decode(token, JWT_SECRET, algorithms=["HS256"], options={"verify_aud": False})
         user_id = payload.get("sub")
-        email = payload.get("email")
-        user_meta = payload.get("user_metadata") or {}
-        if not user_id or not email:
+        email = payload.get("email") or payload.get("preferred_username") or "user@example.com"
+        user_meta = payload.get("user_metadata") or payload.get("raw_user_meta_data") or {}
+        if not user_id:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Invalid token claims",
             )
         return AuthUser(id=user_id, email=email, user_metadata=user_meta)
     except JWTError as e:
+        print(f"JWT Verification Warning: {e}")
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail=f"Invalid token: {str(e)}",

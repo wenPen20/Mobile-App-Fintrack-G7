@@ -8,6 +8,11 @@ import '../../features/auth/screens/register_screen.dart';
 import '../../features/auth/screens/forget_password_screen.dart';
 import '../../features/auth/screens/reset_password_screen.dart';
 import '../../features/dashboard/screens/dashboard_screen.dart';
+import '../../features/transactions/screens/transactions_screen.dart';
+import '../../features/transactions/screens/add_transaction_screen.dart';
+import '../../features/transactions/models/transaction_model.dart';
+import '../../features/budget/screens/budget_screen.dart';
+import '../../features/profile/screens/category_management_screen.dart';
 import '../../features/onboarding/screens/onboarding_screen.dart';
 import '../../features/profile/screens/profile_screen.dart';
 import '../../shared/navigation/app_shell.dart';
@@ -94,19 +99,11 @@ final routerProvider = Provider<GoRouter>((ref) {
           ),
           GoRoute(
             path: '/transactions',
-            builder: (context, state) => const Scaffold(
-              body: Center(
-                child: Text('Transactions Screen (Tab)'),
-              ),
-            ),
+            builder: (context, state) => const TransactionsScreen(),
           ),
           GoRoute(
             path: '/budget',
-            builder: (context, state) => const Scaffold(
-              body: Center(
-                child: Text('Budget Screen (Tab)'),
-              ),
-            ),
+            builder: (context, state) => const BudgetScreen(),
           ),
           GoRoute(
             path: '/profile',
@@ -117,21 +114,13 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/add_transaction',
         parentNavigatorKey: _rootNavigatorKey,
-        builder: (context, state) => const Scaffold(
-          body: Center(
-            child: Text('Add Transaction Screen Modal'),
-          ),
-        ),
+        builder: (context, state) =>
+            AddTransactionScreen(existing: state.extra as TransactionModel?),
       ),
       GoRoute(
         path: '/categories',
         parentNavigatorKey: _rootNavigatorKey,
-        builder: (context, state) => Scaffold(
-          appBar: AppBar(title: const Text('Categories')),
-          body: const Center(
-            child: Text('Category Management feature coming soon'),
-          ),
-        ),
+        builder: (context, state) => const CategoryManagementScreen(),
       ),
     ],
   );

@@ -40,7 +40,7 @@ class ProfileScreen extends ConsumerWidget {
                 final newName = controller.text.trim();
                 if (newName.isNotEmpty) {
                   try {
-                    await ref.read(updateProfileNameProvider)(currentName);
+                    await ref.read(updateProfileNameProvider)(newName);
                     if (context.mounted) {
                       Navigator.pop(context);
                       ScaffoldMessenger.of(context).showSnackBar(

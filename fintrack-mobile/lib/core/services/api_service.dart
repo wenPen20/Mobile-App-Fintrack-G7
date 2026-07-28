@@ -132,6 +132,52 @@ class ApiService {
       body: jsonEncode(data),
     );
   }
+
+  // AI Assistant Endpoints
+
+  /// Sends a text message turn to the AI assistant API endpoint.
+  ///
+  /// [message] non-empty user text message string.
+  /// [sessionId] optional session identifier for conversation context continuity.
+  /// Returns the assistant reply string on success.
+  /// Throws an [Exception] if the request fails or backend returns an error detail.
+  Future<String> sendChatMessage(
+    String message, {
+    String sessionId = 'default',
+  }) async {
+    final response = await http.post(
+      Uri.parse('$baseUrl/ai/chat'),
+      headers: _headers,
+      body: jsonEncode({'message': message, 'session_id': sessionId}),
+    );
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body) as Map<String, dynamic>;
+      return data['reply'] as String;
+    } else {
+      final error = jsonDecode(response.body);
+      throw Exception(error['detail'] ?? 'Failed to reach the assistant');
+    }
+  }
+
+  /// Fetches historical chat messages for a specific session ID.
+  ///
+  /// [sessionId] optional session identifier for context scoping.
+  /// Returns a list of raw message JSON maps ordered oldest to newest.
+  /// Throws an [Exception] if loading history fails.
+  Future<List<dynamic>> getChatHistory({
+    String sessionId = 'default',
+  }) async {
+    final uri = Uri.parse('$baseUrl/ai/history')
+        .replace(queryParameters: {'session_id': sessionId});
+    final response = await http.get(uri, headers: _headers);
+
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body) as List<dynamic>;
+    } else {
+      throw Exception('Failed to load chat history');
+    }
+  }
 }
 
 final apiServiceProvider = Provider<ApiService>((ref) {

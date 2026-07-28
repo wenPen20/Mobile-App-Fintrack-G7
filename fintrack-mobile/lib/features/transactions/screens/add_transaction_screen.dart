@@ -473,9 +473,7 @@ class _AddTransactionScreenState extends ConsumerState<AddTransactionScreen> {
           amount: amount,
           title: title.isNotEmpty ? title : null,
           note: notes.isNotEmpty ? notes : null,
-          transactionDate: _combinedDateTime().subtract(
-            const Duration(days: 1),
-          ),
+          transactionDate: _combinedDateTime(),
         );
       }
       if (mounted) context.pop();

@@ -40,5 +40,6 @@ env/
 .flutter-plugins
 .flutter-plugins-dependencies
 build/
+GeneratedPluginRegistrant.swift
 
 docs

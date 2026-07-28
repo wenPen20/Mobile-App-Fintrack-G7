@@ -285,35 +285,6 @@ class ApiService {
     }
   }
 
-  // --- AI Assistant ---
-  Future<String> sendChatMessage(String message,
-      {String sessionId = 'default'}) async {
-    final response = await http.post(
-      Uri.parse('$baseUrl/ai/chat'),
-      headers: _headers,
-      body: jsonEncode({'message': message, 'session_id': sessionId}),
-    );
-
-    if (response.statusCode == 200) {
-      return jsonDecode(response.body)['reply'] as String;
-    } else {
-      final error = jsonDecode(response.body);
-      throw Exception(error['detail'] ?? 'Failed to reach the assistant');
-    }
-  }
-
-  Future<List<dynamic>> getChatHistory({String sessionId = 'default'}) async {
-    final uri = Uri.parse('$baseUrl/ai/history')
-        .replace(queryParameters: {'session_id': sessionId});
-    final response = await http.get(uri, headers: _headers);
-
-    if (response.statusCode == 200) {
-      return jsonDecode(response.body) as List<dynamic>;
-    } else {
-      throw Exception('Failed to load chat history');
-    }
-  }
-
   // AI Assistant Endpoints
 
   /// Sends a text message turn to the AI assistant API endpoint.

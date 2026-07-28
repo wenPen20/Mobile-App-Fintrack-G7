@@ -3,7 +3,7 @@ import httpx
 from fastapi import APIRouter, HTTPException, Depends, status
 from dotenv import load_dotenv
 
-from ..schemas.auth_schema import (
+from app.schemas.auth_schema import (
     UserCredentials,
     AuthTokenResponse,
     RegisterResponse,
@@ -12,7 +12,7 @@ from ..schemas.auth_schema import (
     ConfirmPasswordRequest,
     UpdatePasswordRequest,
 )
-from ..core.dependencies import get_current_user, AuthUser
+from app.core.dependencies import get_current_user, AuthUser
 
 # Load env variables from fintrack-api/.env
 load_dotenv(".env")

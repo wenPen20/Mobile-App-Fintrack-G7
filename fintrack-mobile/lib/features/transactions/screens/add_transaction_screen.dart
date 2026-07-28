@@ -448,7 +448,7 @@ class _AddTransactionScreenState extends ConsumerState<AddTransactionScreen> {
     final notes = _notesController.text.trim();
 
     if (_category == null) return _snack('Please pick a category');
-    if (amount == null || amount < 0) return _snack('Enter a valid amount');
+    if (amount == null || amount <= 0) return _snack('Enter a valid amount');
 
     setState(() => _isSaving = true);
     try {

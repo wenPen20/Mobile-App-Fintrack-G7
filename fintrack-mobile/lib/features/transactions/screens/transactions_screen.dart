@@ -138,7 +138,7 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
               _typeFilter = TxTypeFilter.all;
               break;
             case 'income':
-              _typeFilter = TxTypeFilter.all;
+              _typeFilter = TxTypeFilter.income;
               break;
             case 'expense':
               _typeFilter = TxTypeFilter.expense;

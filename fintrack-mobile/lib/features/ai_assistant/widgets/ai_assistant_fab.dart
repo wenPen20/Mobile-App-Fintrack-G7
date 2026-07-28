@@ -1,23 +1,32 @@
 import 'package:flutter/material.dart';
-import 'package:fintrack_mobile/core/constants/app_colors.dart';
 
-/// Floating action button that opens the AI assistant context.
+import '../../../core/constants/app_colors.dart';
+import '../screens/ai_chat_screen.dart';
+
+/// Floating action button widget mounting the AI assistant modal launcher.
+///
+/// Displayed within the main app shell, allowing users to open the AI chat bottom sheet.
 class AiAssistantFab extends StatelessWidget {
+  /// Creates an [AiAssistantFab] instance.
   const AiAssistantFab({super.key});
 
+  /// Displays the [AiChatScreen] interface within a modal bottom sheet.
   void _openChat(BuildContext context) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('FinTrack AI Assistant opening...'),
-        duration: Duration(seconds: 2),
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: AppColors.background,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
+      builder: (_) => const AiChatScreen(),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return Opacity(
-      opacity: 0.9,
+      opacity: 0.8,
       child: FloatingActionButton(
         onPressed: () => _openChat(context),
         backgroundColor: AppColors.primary,

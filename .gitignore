@@ -40,3 +40,5 @@ env/
 .flutter-plugins
 .flutter-plugins-dependencies
 build/
+
+docs

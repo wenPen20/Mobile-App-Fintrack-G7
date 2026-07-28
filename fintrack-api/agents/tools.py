@@ -1,30 +1,22 @@
-"""Read-only financial query tools for the FinTrack AI assistant.
-
-These tools allow the ADK agent to query the signed-in user's live financial data
-from Supabase. All tools are read-only and strictly scoped to tool_context.user_id.
-"""
+# Read-only financial query tools for the FinTrack AI assistant.
+#
+# These tools allow the ADK agent to query the signed-in user's live financial data
+# from Supabase. All tools are read-only and strictly scoped to tool_context.user_id.
 
 from datetime import datetime
 from google.adk.tools.tool_context import ToolContext
 from app.core.supabase_client import get_supabase
 
-
+# Parse ISO date strings returned by Supabase, converting UTC Z suffixes.
 def _parse_date(value: str) -> datetime:
-    """Parse ISO date strings returned by Supabase, converting UTC Z suffixes."""
     if value.endswith("Z"):
         value = value.replace("Z", "+00:00")
     return datetime.fromisoformat(value)
 
-
+# Fetch all transaction records for a specific user ID with category names.
+# Args: user_id (str)
+# Returns: List of transaction records containing joined category details.
 def db_rows(user_id: str) -> list[dict]:
-    """Fetch all transaction records for a specific user ID with category names.
-
-    Args:
-        user_id: The authenticated user's unique identifier.
-
-    Returns:
-        List of transaction records containing joined category details.
-    """
     return (
         get_supabase()
         .table("transactions")
@@ -34,20 +26,11 @@ def db_rows(user_id: str) -> list[dict]:
         .data
     )
 
-
+# Calculate income, expenses, net savings, and category breakdown for a month.
+# Use this tool to answer questions about monthly income, spending, or net savings.
+# Args: month (1-12), year (e.g. 2026), tool_context (ToolContext)
+# Returns: Dictionary containing monthly financial totals and spending by category in MYR.
 def get_financial_summary(month: int, year: int, tool_context: ToolContext) -> dict:
-    """Calculate income, expenses, net savings, and category breakdown for a month.
-
-    Use this tool to answer questions about monthly income, spending, or net savings.
-
-    Args:
-        month: Month number (1 to 12).
-        year: Four digit year (e.g. 2026).
-        tool_context: ADK tool context supplying authenticated user details.
-
-    Returns:
-        Dictionary containing monthly financial totals and spending by category in MYR.
-    """
     db = get_supabase()
     rows = (
         db.table("transactions")
@@ -84,19 +67,11 @@ def get_financial_summary(month: int, year: int, tool_context: ToolContext) -> d
         "spending_by_category": {k: round(v, 2) for k, v in ranked.items()},
     }
 
-
+# Retrieve the user's most recent transactions sorted newest first.
+# Use this tool to answer questions about recent purchases or specific items.
+# Args: limit (1-50), tool_context (ToolContext)
+# Returns: Dictionary containing the formatted transaction list.
 def get_recent_transactions(limit: int, tool_context: ToolContext) -> dict:
-    """Retrieve the user's most recent transactions sorted newest first.
-
-    Use this tool to answer questions about recent purchases or specific items.
-
-    Args:
-        limit: Maximum number of transactions to return (1 to 50).
-        tool_context: ADK tool context supplying authenticated user details.
-
-    Returns:
-        Dictionary containing the formatted transaction list.
-    """
     limit = max(1, min(limit, 50))
     rows = db_rows(tool_context.user_id)
     rows.sort(key=lambda t: t["transaction_date"], reverse=True)
@@ -114,20 +89,11 @@ def get_recent_transactions(limit: int, tool_context: ToolContext) -> dict:
         )
     return {"count": len(items), "currency": "MYR", "transactions": items}
 
-
+# Compare category budgets against actual spending for a specific month.
+# Use this tool to inform users whether they are over or under budget per category.
+# Args: month (1-12), year (e.g. 2026), tool_context (ToolContext)
+# Returns: Dictionary containing category budget limits, actual spending, and remainders.
 def get_budget_status(month: int, year: int, tool_context: ToolContext) -> dict:
-    """Compare category budgets against actual spending for a specific month.
-
-    Use this tool to inform users whether they are over or under budget per category.
-
-    Args:
-        month: Month number (1 to 12).
-        year: Four digit year (e.g. 2026).
-        tool_context: ADK tool context supplying authenticated user details.
-
-    Returns:
-        Dictionary containing category budget limits, actual spending, and remainders.
-    """
     db = get_supabase()
     user_id = tool_context.user_id
 

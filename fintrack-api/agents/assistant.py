@@ -1,8 +1,7 @@
-"""FinTrack AI Assistant Google ADK Chatbot Agent.
-
-Configures the ADK root agent with Gemini model integration, read-only tools,
-and PostgreSQL DatabaseSessionService for agent session memory.
-"""
+# FinTrack AI Assistant Google ADK Chatbot Agent.
+#
+# Configures the ADK root agent with Gemini model integration, read-only tools,
+# and PostgreSQL DatabaseSessionService for agent session memory.
 
 import os
 import ssl
@@ -24,16 +23,10 @@ from agents.tools import (
 load_dotenv()
 GEMINI_MODEL = os.environ.get("GEMINI_MODEL", "gemini-2.5-flash")
 
-
+# Build system instructions per turn so the agent knows today's date.
+# Args: context (ReadonlyContext) supplied by ADK runtime.
+# Returns: System prompt string with date context and financial guidance rules.
 def _instruction(context: ReadonlyContext) -> str:
-    """Build system instructions per turn so the agent knows today's date.
-
-    Args:
-        context: ReadonlyContext supplied by ADK runtime.
-
-    Returns:
-        System prompt string with date context and financial guidance rules.
-    """
     today = datetime.now().strftime("%Y-%m-%d")
     return (
         "You are FinTrack's friendly finance assistant. Today's date is "
@@ -102,18 +95,10 @@ _runner = Runner(
     session_service=_session_service,
 )
 
-
+# Send one message turn to the ADK agent and return its reply text.
+# Args: message (str), user_id (str), session_id (str)
+# Returns: The assistant's text response string.
 async def chat(message: str, user_id: str = "local", session_id: str = "default") -> str:
-    """Send one message turn to the ADK agent and return its reply text.
-
-    Args:
-        message: User prompt string.
-        user_id: Authenticated user ID string.
-        session_id: Active session identifier string.
-
-    Returns:
-        The assistant's text response.
-    """
     session = await _session_service.get_session(
         app_name=APP_NAME, user_id=user_id, session_id=session_id
     )

@@ -28,7 +28,7 @@ class TransactionsScreen extends ConsumerStatefulWidget {
 
 class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
   late DateTime _selectedMonth;
-  TxSort _sort = TxSort.dateAsc;
+  TxSort _sort = TxSort.dateDesc;
   TxTypeFilter _typeFilter = TxTypeFilter.all;
 
   @override

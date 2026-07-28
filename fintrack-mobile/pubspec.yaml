@@ -50,6 +50,9 @@ dependencies:
   # Chart library for financial dashboard analytics
   fl_chart: ^0.69.0
 
+  # Markdown renderer for AI assistant messages
+  gpt_markdown: ^1.0.11
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

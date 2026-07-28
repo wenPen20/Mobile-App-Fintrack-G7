@@ -103,7 +103,7 @@ class _BudgetScreenState extends ConsumerState<BudgetScreen> {
               try {
                 await ref.read(setBudgetProvider)(
                   categoryId: category.id,
-                  limit: val.toInt().toDouble(),
+                  limit: val,
                   monthDate: _selectedMonth,
                 );
                 if (mounted) {

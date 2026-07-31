@@ -104,10 +104,37 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
         IconButton(
           icon: const Icon(Icons.search, color: AppColors.textPrimary),
           onPressed: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (_) => const TransactionSearchScreen(),
-              ),
+            final transactionsAsync = ref.read(
+              transactionsProvider(_selectedMonth),
+            );
+
+            transactionsAsync.when(
+              data: (models) {
+                final transactions = models
+                    .map((model) => model.toUiModel())
+                    .toList();
+
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) =>
+                        TransactionSearchScreen(transactions: transactions),
+                  ),
+                );
+              },
+              loading: () {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Transactions are still loading'),
+                  ),
+                );
+              },
+              error: (error, stackTrace) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('Failed to load transactions: $error'),
+                  ),
+                );
+              },
             );
           },
         ),

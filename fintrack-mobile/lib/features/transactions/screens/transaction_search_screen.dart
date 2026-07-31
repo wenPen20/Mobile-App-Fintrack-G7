@@ -10,13 +10,15 @@
 import 'package:flutter/material.dart';
 import 'package:fintrack_mobile/core/constants/app_colors.dart';
 import 'package:fintrack_mobile/core/constants/app_text_styles.dart';
-import '../data/mock_transactions.dart';
 import '../utils/transaction_helpers.dart';
 import 'widgets/day_section_header.dart';
 import 'widgets/transaction_list_item.dart';
+import '../models/transaction_ui.dart';
 
 class TransactionSearchScreen extends StatefulWidget {
-  const TransactionSearchScreen({super.key});
+  final List<TransactionUi> transactions;
+
+  const TransactionSearchScreen({super.key, required this.transactions});
 
   @override
   State<TransactionSearchScreen> createState() =>
@@ -41,7 +43,7 @@ class _TransactionSearchScreenState extends State<TransactionSearchScreen> {
   Widget build(BuildContext context) {
     // Same pipeline as the main screen, but searching instead of month-filtering:
     final results = sorted(
-      byType(bySearch(mockTransactions, _query), _typeFilter),
+      byType(bySearch(widget.transactions, _query), _typeFilter),
       TxSort.dateDesc,
     );
     final sections = groupByDay(results);
@@ -114,7 +116,10 @@ class _TransactionSearchScreenState extends State<TransactionSearchScreen> {
   Widget _buildResults(List<DaySection> sections) {
     if (sections.isEmpty) {
       return Center(
-        child: Text('No matching transactions', style: AppTextStyles.bodyMedium),
+        child: Text(
+          'No matching transactions',
+          style: AppTextStyles.bodyMedium,
+        ),
       );
     }
     final children = <Widget>[];

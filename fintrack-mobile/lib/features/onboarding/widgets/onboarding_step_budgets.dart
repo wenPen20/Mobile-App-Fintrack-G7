@@ -15,23 +15,32 @@ class OnboardingStepBudgets extends ConsumerStatefulWidget {
   });
 
   @override
-  ConsumerState<OnboardingStepBudgets> createState() => _OnboardingStepBudgetsState();
+  ConsumerState<OnboardingStepBudgets> createState() =>
+      _OnboardingStepBudgetsState();
 }
 
 class _OnboardingStepBudgetsState extends ConsumerState<OnboardingStepBudgets> {
   final Map<String, double> _categoryLimits = {
-    'Food & Dining': 600.0,
-    'Transportation': 300.0,
-    'Housing & Utilities': 800.0,
-    'Entertainment': 200.0,
+    'Food & Drinks': 600.0,
+    'Transport': 300.0,
     'Shopping': 250.0,
+    'Bills': 600.0,
+    'Entertainment': 200.0,
+    'Health': 100.0,
+    'Education': 100.0,
+    'Travel': 100.0,
   };
 
   @override
   Widget build(BuildContext context) {
     final onboarding = ref.watch(onboardingProvider);
-    final incomeTarget = onboarding.monthlyIncomeTarget > 0 ? onboarding.monthlyIncomeTarget : 3000.0;
-    final totalAllocated = _categoryLimits.values.fold(0.0, (sum, val) => sum + val);
+    final incomeTarget = onboarding.monthlyIncomeTarget > 0
+        ? onboarding.monthlyIncomeTarget
+        : 3000.0;
+    final totalAllocated = _categoryLimits.values.fold(
+      0.0,
+      (sum, val) => sum + val,
+    );
 
     return SingleChildScrollView(
       padding: const EdgeInsets.all(24),
@@ -42,7 +51,9 @@ class _OnboardingStepBudgetsState extends ConsumerState<OnboardingStepBudgets> {
           const SizedBox(height: 8),
           Text(
             'Allocate your target monthly income across your core spending categories.',
-            style: AppTextStyles.bodyMedium.copyWith(color: AppColors.textSecondary),
+            style: AppTextStyles.bodyMedium.copyWith(
+              color: AppColors.textSecondary,
+            ),
           ),
           const SizedBox(height: 24),
 
@@ -66,22 +77,36 @@ class _OnboardingStepBudgetsState extends ConsumerState<OnboardingStepBudgets> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text('Total Budgeted', style: TextStyle(color: Colors.white70, fontSize: 13)),
+                    const Text(
+                      'Total Budgeted',
+                      style: TextStyle(color: Colors.white70, fontSize: 13),
+                    ),
                     const SizedBox(height: 4),
                     Text(
                       'RM ${totalAllocated.toStringAsFixed(2)}',
-                      style: const TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ],
                 ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    const Text('Income Target', style: TextStyle(color: Colors.white70, fontSize: 13)),
+                    const Text(
+                      'Income Target',
+                      style: TextStyle(color: Colors.white70, fontSize: 13),
+                    ),
                     const SizedBox(height: 4),
                     Text(
                       'RM ${incomeTarget.toStringAsFixed(2)}',
-                      style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600),
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ],
                 ),
@@ -107,10 +132,19 @@ class _OnboardingStepBudgetsState extends ConsumerState<OnboardingStepBudgets> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(entry.key, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15)),
+                        Text(
+                          entry.key,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 15,
+                          ),
+                        ),
                         Text(
                           'RM ${entry.value.toStringAsFixed(0)}',
-                          style: const TextStyle(fontWeight: FontWeight.bold, color: AppColors.primary),
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.primary,
+                          ),
                         ),
                       ],
                     ),
@@ -141,9 +175,14 @@ class _OnboardingStepBudgetsState extends ConsumerState<OnboardingStepBudgets> {
                   style: OutlinedButton.styleFrom(
                     minimumSize: const Size.fromHeight(50),
                     side: const BorderSide(color: AppColors.border),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                   ),
-                  child: const Text('Back', style: TextStyle(color: AppColors.textPrimary)),
+                  child: const Text(
+                    'Back',
+                    style: TextStyle(color: AppColors.textPrimary),
+                  ),
                 ),
               ),
               const SizedBox(width: 16),
@@ -152,7 +191,9 @@ class _OnboardingStepBudgetsState extends ConsumerState<OnboardingStepBudgets> {
                   onPressed: () {
                     // Save limits to provider
                     _categoryLimits.forEach((cat, limit) {
-                      ref.read(onboardingProvider.notifier).updateCategoryBudget(cat, limit);
+                      ref
+                          .read(onboardingProvider.notifier)
+                          .updateCategoryBudget(cat, limit);
                     });
                     widget.onNext();
                   },
@@ -160,9 +201,14 @@ class _OnboardingStepBudgetsState extends ConsumerState<OnboardingStepBudgets> {
                     backgroundColor: AppColors.primary,
                     foregroundColor: Colors.white,
                     minimumSize: const Size.fromHeight(50),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                   ),
-                  child: const Text('Review Setup', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                  child: const Text(
+                    'Review Setup',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
                 ),
               ),
             ],

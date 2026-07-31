@@ -2,6 +2,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/services/api_service.dart';
 import '../../auth/providers/auth_provider.dart';
 import '../../dashboard/providers/dashboard_provider.dart';
+import '../../budget/providers/budget_provider.dart' as budget;
+import 'package:flutter/foundation.dart';
 
 class OnboardingTransactionItem {
   final String title;
@@ -120,24 +122,67 @@ class OnboardingNotifier extends Notifier<OnboardingState> {
   }
 
   void addInitialTransaction(OnboardingTransactionItem item) {
-    final updated = List<OnboardingTransactionItem>.from(state.initialTransactions)..add(item);
+    final updated = List<OnboardingTransactionItem>.from(
+      state.initialTransactions,
+    )..add(item);
     state = state.copyWith(initialTransactions: updated);
   }
 
   void removeInitialTransaction(int index) {
     if (index >= 0 && index < state.initialTransactions.length) {
-      final updated = List<OnboardingTransactionItem>.from(state.initialTransactions)..removeAt(index);
+      final updated = List<OnboardingTransactionItem>.from(
+        state.initialTransactions,
+      )..removeAt(index);
       state = state.copyWith(initialTransactions: updated);
     }
   }
 
   Future<bool> completeOnboarding() async {
     state = state.copyWith(isSubmitting: true, error: null);
+
     try {
       final api = ref.read(apiServiceProvider);
       final now = DateTime.now();
 
-      // 1. Update Profile & Backend
+      // Get or seed the user's categories.
+      final rawCategories = await api.getCategories();
+
+      final expenseCategories = <String, String>{};
+
+      for (final item in rawCategories) {
+        final category = Map<String, dynamic>.from(item as Map);
+
+        final id = category['id']?.toString();
+        final name = category['name']?.toString().trim();
+        final type = category['type']?.toString().toLowerCase().trim();
+
+        if (id != null && name != null && type == 'expense') {
+          expenseCategories[name.toLowerCase()] = id;
+        }
+      }
+
+      // Create each onboarding budget.
+      for (final entry in state.categoryBudgets.entries) {
+        final categoryName = entry.key.trim();
+        final amount = entry.value;
+
+        final categoryId = expenseCategories[categoryName.toLowerCase()];
+
+        if (categoryId == null) {
+          throw Exception(
+            'The category "$categoryName" was not found in your expense categories.',
+          );
+        }
+
+        await api.createBudget({
+          'category_id': categoryId,
+          'amount_limit': amount,
+          'month': now.month,
+          'year': now.year,
+        });
+      }
+
+      // Complete onboarding only after budgets are saved.
       await api.updateOnboarding({
         if (state.name.trim().isNotEmpty) 'name': state.name.trim(),
         'onboarding_completed': true,
@@ -147,23 +192,29 @@ class OnboardingNotifier extends Notifier<OnboardingState> {
         'risk_appetite': state.riskAppetite,
       });
 
-      // Mark onboarding as completed in auth state & refresh providers
       ref.read(authProvider.notifier).setOnboardingCompleted(true);
+
       ref.invalidate(profileProvider);
       ref.invalidate(budgetSummaryProvider(now));
 
-      state = state.copyWith(isSubmitting: false);
+      state = state.copyWith(isSubmitting: false, error: null);
+
       return true;
-    } catch (e) {
+    } catch (e, stackTrace) {
+      debugPrint('Complete onboarding error: $e');
+      debugPrintStack(stackTrace: stackTrace);
+
       state = state.copyWith(
         isSubmitting: false,
-        error: e.toString().replaceAll('Exception: ', ''),
+        error: e.toString().replaceFirst('Exception: ', ''),
       );
+
       return false;
     }
   }
 }
 
-final onboardingProvider = NotifierProvider<OnboardingNotifier, OnboardingState>(
-  OnboardingNotifier.new,
-);
+final onboardingProvider =
+    NotifierProvider<OnboardingNotifier, OnboardingState>(
+      OnboardingNotifier.new,
+    );

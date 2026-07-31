@@ -17,7 +17,10 @@ class OnboardingStepSummary extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final onboarding = ref.watch(onboardingProvider);
-    final totalBudgeted = onboarding.categoryBudgets.values.fold(0.0, (sum, val) => sum + val);
+    final totalBudgeted = onboarding.categoryBudgets.values.fold(
+      0.0,
+      (sum, val) => sum + val,
+    );
 
     return SingleChildScrollView(
       padding: const EdgeInsets.all(24),
@@ -28,7 +31,9 @@ class OnboardingStepSummary extends ConsumerWidget {
           const SizedBox(height: 8),
           Text(
             'Confirm your initial setup. You can adjust these anytime in your Profile & Settings.',
-            style: AppTextStyles.bodyMedium.copyWith(color: AppColors.textSecondary),
+            style: AppTextStyles.bodyMedium.copyWith(
+              color: AppColors.textSecondary,
+            ),
           ),
           const SizedBox(height: 32),
 
@@ -42,15 +47,27 @@ class OnboardingStepSummary extends ConsumerWidget {
             ),
             child: Column(
               children: [
-                _summaryRow('Display Name', onboarding.name.isNotEmpty ? onboarding.name : 'User'),
+                _summaryRow(
+                  'Display Name',
+                  onboarding.name.isNotEmpty ? onboarding.name : 'User',
+                ),
                 const Divider(height: 24),
-                _summaryRow('Monthly Income Target', 'RM ${onboarding.monthlyIncomeTarget.toStringAsFixed(2)}'),
+                _summaryRow(
+                  'Monthly Income Target',
+                  'RM ${onboarding.monthlyIncomeTarget.toStringAsFixed(2)}',
+                ),
                 const Divider(height: 24),
-                _summaryRow('Total Budget Allocated', 'RM ${totalBudgeted.toStringAsFixed(2)}'),
+                _summaryRow(
+                  'Total Budget Allocated',
+                  'RM ${totalBudgeted.toStringAsFixed(2)}',
+                ),
                 const Divider(height: 24),
                 _summaryRow('Primary Goal', onboarding.financialGoal),
                 const Divider(height: 24),
-                _summaryRow('Risk Appetite', onboarding.riskAppetite.toUpperCase()),
+                _summaryRow(
+                  'Risk Appetite',
+                  onboarding.riskAppetite.toUpperCase(),
+                ),
               ],
             ),
           ),
@@ -65,9 +82,14 @@ class OnboardingStepSummary extends ConsumerWidget {
                   style: OutlinedButton.styleFrom(
                     minimumSize: const Size.fromHeight(50),
                     side: const BorderSide(color: AppColors.border),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                   ),
-                  child: const Text('Back', style: TextStyle(color: AppColors.textPrimary)),
+                  child: const Text(
+                    'Back',
+                    style: TextStyle(color: AppColors.textPrimary),
+                  ),
                 ),
               ),
               const SizedBox(width: 16),
@@ -76,24 +98,51 @@ class OnboardingStepSummary extends ConsumerWidget {
                   onPressed: onboarding.isSubmitting
                       ? null
                       : () async {
-                          final success = await ref.read(onboardingProvider.notifier).completeOnboarding();
-                          if (success && context.mounted) {
+                          final success = await ref
+                              .read(onboardingProvider.notifier)
+                              .completeOnboarding();
+
+                          if (!context.mounted) return;
+
+                          if (success) {
                             onComplete();
+                          } else {
+                            final error = ref.read(onboardingProvider).error;
+
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  error ?? 'Failed to complete account setup',
+                                ),
+                                backgroundColor: Colors.red,
+                              ),
+                            );
                           }
                         },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primary,
                     foregroundColor: Colors.white,
                     minimumSize: const Size.fromHeight(50),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                   ),
                   child: onboarding.isSubmitting
                       ? const SizedBox(
                           width: 24,
                           height: 24,
-                          child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
+                          child: CircularProgressIndicator(
+                            color: Colors.white,
+                            strokeWidth: 2,
+                          ),
                         )
-                      : const Text('Get Started!', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                      : const Text(
+                          'Get Started!',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                 ),
               ),
             ],
@@ -107,8 +156,14 @@ class OnboardingStepSummary extends ConsumerWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(label, style: const TextStyle(color: AppColors.textSecondary, fontSize: 14)),
-        Text(value, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
+        Text(
+          label,
+          style: const TextStyle(color: AppColors.textSecondary, fontSize: 14),
+        ),
+        Text(
+          value,
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+        ),
       ],
     );
   }

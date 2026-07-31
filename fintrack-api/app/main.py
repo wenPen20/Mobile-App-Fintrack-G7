@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from .routers import ai, auth_router, summary, profile, transactions, budgets
+from .routers import ai, auth_router, summary, profile, transactions, budgets, categories
 
 app = FastAPI(title="FinTrack API")
 
@@ -20,6 +20,7 @@ app.include_router(profile.router, prefix="/profile", tags=["Profile"])
 app.include_router(transactions.router, prefix="/transactions", tags=["Transactions"])
 app.include_router(budgets.router, prefix="/budgets", tags=["Budgets"])
 app.include_router(ai.router, prefix="/ai", tags=["AI Assistant"])
+app.include_router(categories.router, prefix="/categories", tags=["Categories"],)
 
 
 @app.get("/")

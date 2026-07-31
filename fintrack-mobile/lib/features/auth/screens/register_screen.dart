@@ -77,7 +77,9 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
       return;
     }
 
-    final success = await ref.read(authProvider.notifier).register(email, password, confirmPassword);
+    final success = await ref
+        .read(authProvider.notifier)
+        .register(email, password, confirmPassword);
 
     if (mounted) {
       if (success) {
@@ -102,23 +104,20 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
     final authState = ref.watch(authProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Create Account'),
-        elevation: 0,
-      ),
+      appBar: AppBar(title: const Text('Create Account'), elevation: 0),
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 20.0),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 24.0,
+              vertical: 20.0,
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Text(
-                  'Join Us',
-                  style: TextStyle(
-                    fontSize: 26,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  'Register Now',
+                  style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
                 ),
                 const Text(
                   'Enter your credentials to get started',
@@ -167,7 +166,9 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                   isPassword: true,
                   isObscure: _obscureConfirmPassword,
                   onToggleObscure: () {
-                    setState(() => _obscureConfirmPassword = !_obscureConfirmPassword);
+                    setState(
+                      () => _obscureConfirmPassword = !_obscureConfirmPassword,
+                    );
                   },
                   errorText: _confirmPasswordError,
                 ),

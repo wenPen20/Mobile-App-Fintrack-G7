@@ -119,16 +119,24 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 const SizedBox(height: 16),
                 const Center(
                   child: Text(
-                    'Welcome Back',
+                    'Fintrack',
                     style: TextStyle(
-                      fontSize: 24,
+                      fontSize: 28,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
+                const SizedBox(height: 4),
                 const Center(
                   child: Text(
-                    'Sign in to your account to continue',
+                    'Your trusted finance tracker',
+                    style: TextStyle(color: Colors.grey, fontSize: 14),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                const Center(
+                  child: Text(
+                    'Sign in to continue',
                     style: TextStyle(color: Colors.grey, fontSize: 14),
                   ),
                 ),

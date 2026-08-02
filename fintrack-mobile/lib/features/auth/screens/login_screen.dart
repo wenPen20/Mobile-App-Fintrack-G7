@@ -126,21 +126,25 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 4),
+                const SizedBox(height: 2),
                 const Center(
                   child: Text(
                     'Your trusted finance tracker',
-                    style: TextStyle(color: Colors.grey, fontSize: 14),
+                    style: TextStyle(
+                      color: Color(0xFF616161),
+                      fontSize: 14,
+                      fontStyle: FontStyle.italic,
+                    ),
                   ),
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 28),
                 const Center(
                   child: Text(
                     'Sign in to continue',
                     style: TextStyle(color: Colors.grey, fontSize: 14),
                   ),
                 ),
-                const SizedBox(height: 32),
+                const SizedBox(height: 16),
 
                 // Error Banner
                 if (_formError != null) ...[

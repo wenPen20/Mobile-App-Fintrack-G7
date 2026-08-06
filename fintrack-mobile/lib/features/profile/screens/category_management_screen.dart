@@ -118,12 +118,12 @@ class _CategoryManagementScreenState
       ...others.map((c) => c.id),
     ];
 
-    // Defer the provider update to after the layout phase completes.
-    // ReorderableListView triggers onReorder during layout; updating state
-    // synchronously here would mutate the render tree mid-layout.
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(categoryOrderProvider.notifier).updateOrder(allOrderedIds);
-    });
+    // Must be applied synchronously. ReorderableListView keys every row with a
+    // GlobalKey derived from the row's ValueKey and assumes the list it rebuilds
+    // right after onReorder returns is already in the new order. Deferring this
+    // (e.g. to a post-frame callback) reparents those GlobalKeys a frame late,
+    // which drops the reorder or crashes the list if another drag is in flight.
+    ref.read(categoryOrderProvider.notifier).updateOrder(allOrderedIds);
   }
 
   @override

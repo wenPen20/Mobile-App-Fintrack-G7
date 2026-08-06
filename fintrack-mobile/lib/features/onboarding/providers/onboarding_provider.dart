@@ -2,7 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/services/api_service.dart';
 import '../../auth/providers/auth_provider.dart';
 import '../../dashboard/providers/dashboard_provider.dart';
-import '../../budget/providers/budget_provider.dart' as budget;
+// import '../../budget/providers/budget_provider.dart' as budget;
 import 'package:flutter/foundation.dart';
 
 class OnboardingTransactionItem {

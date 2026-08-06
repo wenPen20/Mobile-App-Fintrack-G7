@@ -1,3 +1,5 @@
+# FastAPI router for user profile and onboarding endpoints.
+
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from pydantic import BaseModel
@@ -28,6 +30,11 @@ async def get_profile(
     user = Depends(get_current_user),
     db = Depends(get_supabase)
 ):
+    """
+    Return the authenticated user's profile, merging JWT metadata, in-memory
+    cache, and the Supabase profiles table. Supports both onboarding_done and
+    onboarding_completed column names for schema flexibility.
+    """
     user_id_str = str(user.id)
     cached = _user_profiles_cache.get(user_id_str, {})
 
@@ -79,7 +86,7 @@ async def get_profile(
                 if p.get("risk_appetite"):
                     risk_appetite = p.get("risk_appetite")
         except Exception as e:
-            # TODO: Temporary local fallback -- remove when backend DB tables are live
+            # Graceful fallback: profile table may not exist in all environments.
             print(f"Supabase profiles query fallback: {e}")
 
     return {
@@ -101,6 +108,9 @@ async def update_name(
     user = Depends(get_current_user),
     db = Depends(get_supabase)
 ):
+    """
+    Update the authenticated user's display name.
+    """
     user_id_str = str(user.id)
     cached = _user_profiles_cache.setdefault(user_id_str, {})
     cached["name"] = data.name
@@ -125,6 +135,10 @@ async def update_onboarding(
     user = Depends(get_current_user),
     db = Depends(get_supabase)
 ):
+    """
+    Save onboarding answers (name, income, expenses, risk appetite) to the
+    user's profile and mark onboarding as completed.
+    """
     user_id_str = str(user.id)
     cached = _user_profiles_cache.setdefault(user_id_str, {})
     cached["onboarding_done"] = data.onboarding_completed

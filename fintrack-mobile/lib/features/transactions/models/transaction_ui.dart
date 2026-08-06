@@ -1,13 +1,12 @@
 // lib/features/transactions/models/transaction_ui.dart
 //
 // A "presentation model" — a plain Dart class that holds the data ONE transaction
-// row needs in order to be drawn on screen during this UI-design phase.
+// row needs in order to be drawn on screen.
 //
 // Why a separate class instead of the real TransactionModel?
-//  - The real model (models/transaction_model.dart) mirrors P4's backend and has
-//    NO category icon/colour.
-//  - Our Cashew-inspired design needs those, so we keep a UI-only model here and
-//    feed it with mock data. The real model stays untouched until we wire the API.
+//  - TransactionModel mirrors the backend schema and is used for API serialisation.
+//  - TransactionUi carries a full Category object and a signed amount, which
+//    lets widgets display icon, colour, and income-vs-expense styling directly.
 
 // We import the Category data class (which YOU will write in category.dart).
 // An import gives this file access to the `Category` type defined over there.

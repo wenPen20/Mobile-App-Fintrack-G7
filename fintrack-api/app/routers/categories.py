@@ -1,3 +1,5 @@
+# FastAPI router for category CRUD and default-seeding endpoints.
+
 from fastapi import APIRouter, Depends, HTTPException
 from typing import List
 from app.core.supabase_client import get_supabase
@@ -36,6 +38,10 @@ async def get_categories(
     user=Depends(get_current_user),
     db: Client = Depends(get_supabase),
 ):
+    """
+    Return all categories owned by the authenticated user.
+    Seeds default categories from global templates on first access.
+    """
     try:
         result = db.table("categories").select("*").eq("user_id", user.id).execute()
 
@@ -55,6 +61,9 @@ async def create_category(
     user=Depends(get_current_user),
     db: Client = Depends(get_supabase),
 ):
+    """
+    Create a new custom category for the authenticated user.
+    """
     try:
         data = category_data.model_dump()
         data["user_id"] = user.id
@@ -77,6 +86,9 @@ async def update_category(
     user=Depends(get_current_user),
     db: Client = Depends(get_supabase),
 ):
+    """
+    Update an existing category owned by the authenticated user.
+    """
     try:
         # Verify ownership
         existing = (
@@ -117,6 +129,10 @@ async def delete_category(
     user=Depends(get_current_user),
     db: Client = Depends(get_supabase),
 ):
+    """
+    Delete a category owned by the authenticated user.
+    Rejects deletion if the category is still referenced by budgets or transactions (409).
+    """
     try:
         # Verify ownership
         existing = (

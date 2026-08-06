@@ -1,3 +1,5 @@
+# FastAPI router for budget management endpoints.
+
 from fastapi import APIRouter, Depends, Query, HTTPException
 from typing import Optional, List
 from app.core.supabase_client import get_supabase
@@ -12,6 +14,9 @@ async def create_budget(
     user = Depends(get_current_user),
     db = Depends(get_supabase)
 ):
+    """
+    Create or update (upsert) a budget for a specific category and month.
+    """
     try:
         if db is None:
             raise HTTPException(status_code=503, detail="Database client unavailable")
@@ -43,6 +48,9 @@ async def get_budgets(
     user = Depends(get_current_user),
     db = Depends(get_supabase)
 ):
+    """
+    List budgets for the authenticated user, optionally filtered by month and year.
+    """
     try:
         if db is None:
             return []

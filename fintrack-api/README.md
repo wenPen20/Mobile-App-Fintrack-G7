@@ -2,7 +2,7 @@
 
 FastAPI backend for FinTrack. It fronts Supabase (auth and PostgreSQL) and runs the Gemini-powered assistant through Google ADK. The Flutter client talks only to this service.
 
-> **Setting up for the first time? Read the [root README](../README.md).** It covers prerequisites, the Supabase schema, the `.env` values, and how to point the Flutter client at this server. What follows is the short version for people who have done it before.
+> **Setting up for the first time? Read the [root README](../README.md).** It covers prerequisites, the Supabase schema, the `.env` values, and how to point the Flutter client at this server. This page covers API-specific details only.
 
 ## Quick start
 

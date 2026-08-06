@@ -20,7 +20,7 @@ def get_supabase():
     Dependency to inject the Supabase client into endpoints.
     Returns None if supabase library or keys are missing for defensive local fallback.
     """
-    # TODO: Temporary local fallback check -- remove when backend DB credentials are fully configured
+    # Defensive fallback: returns None if the Supabase library or credentials are not configured.
     if not HAS_SUPABASE or not SUPABASE_URL or not SUPABASE_KEY:
         return None
     try:

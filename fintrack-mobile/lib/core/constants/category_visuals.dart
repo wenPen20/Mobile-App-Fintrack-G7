@@ -1,4 +1,4 @@
-// lib/features/transactions/utils/category_visuals.dart
+// lib/core/constants/category_visuals.dart
 //
 // The "translation layer" between the DATA (plain strings stored in the DB,
 // like "utensils" and "#D85A30") and the FLUTTER VISUALS (IconData, Color).

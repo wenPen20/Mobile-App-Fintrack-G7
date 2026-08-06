@@ -1,9 +1,6 @@
 // lib/features/budget/models/category_budget.dart
 //
-// TEMP (Sprint 1): mirrors what a `budget` row would look like once P4's API
-// exists (a monthly spending limit set per category). Hardcoded for now via
-// mock_budgets.dart.
-//
+// Pairs a Category with its monthly spending limit (the `budgets` table row).
 // Pure Dart — no Flutter imports.
 
 import 'category.dart';

@@ -2,7 +2,7 @@
 
 A personal finance tracker built as a Flutter mobile client backed by a FastAPI service, a Supabase (PostgreSQL) database, and a Gemini-powered AI financial assistant.
 
-This README is the single source of truth for setting the project up. The READMEs inside `fintrack-api/` and `fintrack-mobile/` only cover details specific to each half.
+This README covers everything needed to set up and run the project. The READMEs inside `fintrack-api/` and `fintrack-mobile/` only cover details specific to each half.
 
 ---
 
@@ -56,7 +56,7 @@ The Flutter app never talks to Supabase or Gemini directly. Every request goes t
 
 ## 2. Prerequisites
 
-Install these before you start. Versions listed are the ones the project is developed and tested against.
+The following tools are required. Versions listed are those the project was developed and tested against.
 
 | Tool | Version | Check with | Notes |
 |---|---|---|---|
@@ -73,7 +73,7 @@ You also need two accounts:
 
 Then run `flutter doctor` and resolve anything it reports as an error for the platform you intend to run on. Warnings about platforms you are not using can be ignored.
 
-> If you are joining the existing team project, ask a team member for the `.env` values and the Supabase project invite instead of creating your own. That skips [section 4](#4-set-up-the-database) entirely.
+> If working with an existing Supabase project, use the provided `.env` values and project invite instead of creating a new one. That skips [section 4](#4-set-up-the-database) entirely.
 
 ---
 
@@ -300,7 +300,7 @@ Verify it before you touch Flutter:
 - http://localhost:8000 returns `{"message":"Welcome to FinTrack API"}`
 - http://localhost:8000/docs is the interactive Swagger UI, where you can try every endpoint
 
-`--reload` restarts the server whenever you save a Python file. Leave this terminal running and open a second one for the Flutter work.
+`--reload` restarts the server whenever a Python file is saved. Keep this terminal running and open a separate terminal for the Flutter client.
 
 ---
 
@@ -315,7 +315,7 @@ flutter pub get
 
 ### 7.1 Point the app at the backend
 
-This is the step new contributors miss most often. The API base URL is currently hardcoded in **two** places, and both must match:
+This is the most commonly missed step. The API base URL is currently hardcoded in **two** places, and both must match:
 
 - [lib/core/services/api_service.dart:338](fintrack-mobile/lib/core/services/api_service.dart#L338)
 - [lib/features/auth/providers/auth_provider.dart:37](fintrack-mobile/lib/features/auth/providers/auth_provider.dart#L37)
@@ -527,7 +527,7 @@ Every endpoint except the auth ones requires an `Authorization: Bearer <token>` 
 
 ## 14. Known gotchas
 
-Things that are true of the code as it stands, and will bite you if nobody warns you.
+Current limitations and known issues in the codebase.
 
 - **The API base URL is hardcoded in two files.** Changing one and not the other produces the confusing state where login works but nothing else loads, or the reverse. A single shared constant or a `--dart-define` would remove the problem, and has not been done yet.
 - **CORS is wide open.** `allow_origins=["*"]` in [app/main.py](fintrack-api/app/main.py) is convenient for local development on Flutter web, and is not a production-safe setting.

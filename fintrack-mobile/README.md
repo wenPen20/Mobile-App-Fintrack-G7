@@ -2,7 +2,7 @@
 
 Flutter client for FinTrack. It covers onboarding and financial profile, the dashboard, transactions, budgets, and the AI financial assistant. All data comes from the FastAPI backend in [`fintrack-api`](../fintrack-api), so **the backend must be running before this app will get past the login screen**.
 
-> **Setting up for the first time? Read the [root README](../README.md).** It covers prerequisites, the database, and the backend. What follows is the short version.
+> **Setting up for the first time? Read the [root README](../README.md).** It covers prerequisites, the database, and the backend. This page covers Flutter client details only.
 
 ## Quick start
 

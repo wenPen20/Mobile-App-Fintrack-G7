@@ -1,3 +1,5 @@
+# FastAPI router for transaction CRUD endpoints.
+
 from fastapi import APIRouter, Depends, Query, HTTPException
 from typing import Optional, List
 from datetime import datetime
@@ -13,6 +15,9 @@ async def create_transaction(
     user = Depends(get_current_user),
     db = Depends(get_supabase)
 ):
+    """
+    Create a new transaction record for the authenticated user.
+    """
     try:
         if db is None:
             raise HTTPException(status_code=503, detail="Database client unavailable")
@@ -46,6 +51,9 @@ async def get_transactions(
     user = Depends(get_current_user),
     db = Depends(get_supabase)
 ):
+    """
+    List transactions for the authenticated user, optionally filtered by month, year, and type.
+    """
     try:
         if db is None:
             return []
@@ -93,6 +101,9 @@ async def update_transaction(
     user = Depends(get_current_user),
     db = Depends(get_supabase)
 ):
+    """
+    Update an existing transaction owned by the authenticated user.
+    """
     try:
         if db is None:
             raise HTTPException(status_code=503, detail="Database client unavailable")
@@ -131,6 +142,9 @@ async def delete_transaction(
     user = Depends(get_current_user),
     db = Depends(get_supabase)
 ):
+    """
+    Delete a transaction owned by the authenticated user.
+    """
     try:
         if db is None:
             raise HTTPException(status_code=503, detail="Database client unavailable")

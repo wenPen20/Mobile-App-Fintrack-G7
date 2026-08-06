@@ -1,6 +1,4 @@
-// TEMP (Sprint 1): mirrors the Supabase `category` table. Hardcoded for now;
-// will be replaced by data from P4's API after Sprint 1.
-//
+// Mirrors the Supabase `categories` table schema.
 // Pure Dart — no Flutter imports. icon/colorHex are reference strings only.
 
 class Category {

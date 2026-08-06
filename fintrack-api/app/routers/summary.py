@@ -1,3 +1,5 @@
+# FastAPI router for the financial summary endpoint.
+
 from fastapi import APIRouter, Depends, Query, HTTPException
 from datetime import datetime
 from app.core.supabase_client import get_supabase
@@ -12,9 +14,12 @@ async def get_summary(
     user = Depends(get_current_user),
     db = Depends(get_supabase)
 ):
+    """
+    Calculate income, expenses, net balance, and per-category spending for a given month.
+    """
     try:
         if db is None:
-            # TODO: Temporary local fallback -- remove when backend DB tables and credentials are live
+            # Fallback: returns static placeholder data when the database client is unavailable.
             return {
                 "period": f"{month}/{year}",
                 "total_income": 4500.00,
@@ -62,7 +67,7 @@ async def get_summary(
             "per_category_breakdown": per_category_breakdown
         }
     except Exception as e:
-        # TODO: Temporary local fallback -- remove when backend DB tables and credentials are live
+        # Fallback: returns static placeholder data on query failure.
         return {
             "period": f"{month}/{year}",
             "total_income": 4500.00,

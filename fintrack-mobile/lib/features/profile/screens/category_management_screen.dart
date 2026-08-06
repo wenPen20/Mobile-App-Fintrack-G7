@@ -14,6 +14,7 @@ import 'package:fintrack_mobile/features/budget/models/category.dart';
 import 'package:fintrack_mobile/features/profile/providers/category_provider.dart';
 import 'widgets/add_edit_category_sheet.dart';
 
+/// Screen for viewing, reordering, creating, editing, and deleting categories.
 class CategoryManagementScreen extends ConsumerStatefulWidget {
   const CategoryManagementScreen({super.key});
 

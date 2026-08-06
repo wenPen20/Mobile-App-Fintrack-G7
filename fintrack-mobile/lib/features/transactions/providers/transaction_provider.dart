@@ -5,7 +5,7 @@ import '../../dashboard/providers/dashboard_provider.dart'
     as dashboard;
 import '../models/transaction_model.dart';
 
-// family provider to load transactions on demand for a selected month
+/// Provider family to load transactions on demand for a selected month
 final transactionsProvider =
     FutureProvider.family<List<TransactionModel>, DateTime>((
       ref,
@@ -19,7 +19,7 @@ final transactionsProvider =
       return raw.map((json) => TransactionModel.fromJson(json)).toList();
     });
 
-// provider to fetch the most recent transactions across all months for the dashboard
+/// Provider to fetch the most recent transactions across all months for the dashboard
 final recentTransactionsProvider = FutureProvider<List<TransactionModel>>((
   ref,
 ) async {
@@ -55,7 +55,7 @@ void _invalidateAll(Ref ref) {
   ref.invalidate(dashboard.dashboardTrendProvider);
 }
 
-// provider/function to add a transaction and invalidate relevant caches
+/// Provider/function to add a transaction and invalidate relevant caches
 final addTransactionProvider = Provider((ref) {
   return ({
     required String categoryId,
@@ -81,7 +81,7 @@ final addTransactionProvider = Provider((ref) {
   };
 });
 
-// provider/function to update a transaction and invalidate relevant caches
+/// Provider/function to update a transaction and invalidate relevant caches
 final updateTransactionProvider = Provider((ref) {
   return ({
     required String transactionId,
@@ -93,7 +93,7 @@ final updateTransactionProvider = Provider((ref) {
   };
 });
 
-// provider/function to delete a transaction and invalidate relevant caches
+/// Provider/function to delete a transaction and invalidate relevant caches
 final deleteTransactionProvider = Provider((ref) {
   return ({required String transactionId}) async {
     final api = ref.read(apiServiceProvider);

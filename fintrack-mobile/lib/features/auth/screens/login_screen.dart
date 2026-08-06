@@ -10,6 +10,7 @@ import 'register_screen.dart';
 import 'forget_password_screen.dart';
 
 
+/// Email and password sign-in screen.
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
 

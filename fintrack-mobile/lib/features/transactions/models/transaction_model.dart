@@ -1,6 +1,7 @@
 import 'package:fintrack_mobile/features/transactions/models/transaction_ui.dart';
 import 'package:fintrack_mobile/features/budget/models/category.dart';
 
+/// Data model representing a transaction record fetched from the API.
 class TransactionModel {
   final String id;
   final String userId;

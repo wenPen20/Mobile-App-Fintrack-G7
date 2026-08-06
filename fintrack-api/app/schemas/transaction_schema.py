@@ -3,6 +3,7 @@ from typing import Optional
 from datetime import datetime
 
 class TransactionBase(BaseModel):
+    """Shared fields for transaction create and response models."""
     category_id: str = Field(..., description="UUID of the transaction category")
     type: str = Field(..., description="'income' or 'expense'")
     amount: float = Field(..., gt=0, description="Amount of the transaction, must be positive")
@@ -11,9 +12,11 @@ class TransactionBase(BaseModel):
     transaction_date: datetime = Field(..., description="Timestamp of the transaction")
 
 class TransactionCreate(TransactionBase):
+    """Request payload for creating a new transaction."""
     pass
 
 class TransactionUpdate(BaseModel):
+    """Request payload for partially updating an existing transaction."""
     category_id: Optional[str] = None
     type: Optional[str] = None
     amount: Optional[float] = None
@@ -22,6 +25,7 @@ class TransactionUpdate(BaseModel):
     transaction_date: Optional[datetime] = None
 
 class TransactionResponse(TransactionBase):
+    """Response model for a transaction record with joined category info."""
     id: str
     user_id: str
     category_name: Optional[str] = None

@@ -12,6 +12,7 @@ import 'package:fintrack_mobile/features/profile/screens/widgets/profile_header.
 import 'package:fintrack_mobile/features/profile/screens/widgets/settings_tile.dart';
 import 'package:fintrack_mobile/features/profile/screens/widgets/settings_section.dart';
 
+/// User profile and settings screen with name editing, password change, and logout.
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
 

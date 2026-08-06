@@ -8,7 +8,7 @@
 //  - TransactionUi carries a full Category object and a signed amount, which
 //    lets widgets display icon, colour, and income-vs-expense styling directly.
 
-// We import the Category data class (which YOU will write in category.dart).
+// We import the Category data class from category.dart.
 // An import gives this file access to the `Category` type defined over there.
 //
 // Why a class and not an enum? Categories are USER-OWNED, EDITABLE data that
@@ -16,6 +16,7 @@
 // runtime data -> a data class + a List, not a fixed compile-time enum.
 import 'package:fintrack_mobile/features/budget/models/category.dart';
 
+/// Presentation data model representing a single transaction UI item.
 class TransactionUi {
   final String name; // e.g. "Claude Pro Subscription"
   final Category category; // the full category -> gives us name, icon, colour

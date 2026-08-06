@@ -1,3 +1,7 @@
+// GoRouter configuration with auth-aware redirect guard.
+// Unauthenticated users are held on auth screens; users who haven't completed
+// onboarding are redirected into the onboarding flow.
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -20,7 +24,7 @@ import '../../shared/navigation/app_shell.dart';
 final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'root');
 final GlobalKey<NavigatorState> _shellNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'shell');
 
-// Helper class to make GoRouter react to Riverpod AuthState changes
+/// Helper class to make GoRouter react to Riverpod AuthState changes
 class AuthListenable extends ChangeNotifier {
   AuthListenable(Ref ref) {
     ref.listen<AuthState>(

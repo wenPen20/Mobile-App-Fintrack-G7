@@ -6,6 +6,7 @@ import '../../../core/widgets/app_text_field.dart';
 import '../../../core/widgets/auth_error_banner.dart';
 import 'reset_password_screen.dart';
 
+/// Screen for requesting a password reset email.
 class ForgetPasswordScreen extends ConsumerStatefulWidget {
   const ForgetPasswordScreen({super.key});
 

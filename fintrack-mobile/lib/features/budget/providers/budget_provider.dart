@@ -3,7 +3,7 @@ import '../../../core/services/api_service.dart';
 import '../models/category_budget.dart';
 import '../models/category.dart';
 
-// family provider to load budgets for a selected month/year
+/// Family provider to load budgets for a selected month/year
 final budgetsProvider = FutureProvider.family<List<CategoryBudget>, DateTime>((ref, monthDate) async {
   final api = ref.watch(apiServiceProvider);
   final raw = await api.getBudgets(month: monthDate.month, year: monthDate.year);
@@ -22,13 +22,13 @@ final budgetsProvider = FutureProvider.family<List<CategoryBudget>, DateTime>((r
   }).toList();
 });
 
-// Fetches dynamic financial calculations (total income, expenses, net) for a specific month
+/// Fetches dynamic financial calculations (total income, expenses, net) for a specific month
 final budgetSummaryProvider = FutureProvider.family<Map<String, dynamic>, DateTime>((ref, date) async {
   final api = ref.watch(apiServiceProvider);
   return api.getSummary(date.month, date.year);
 });
 
-// provider/function to configure a budget and invalidate relevant caches
+/// Provider/function to configure a budget and invalidate relevant caches
 final setBudgetProvider = Provider((ref) {
   return ({
     required String categoryId,
@@ -52,7 +52,7 @@ final setBudgetProvider = Provider((ref) {
   };
 });
 
-// Fetches all real categories for the user (triggers seeding on first call)
+/// Fetches all real categories for the user (triggers seeding on first call)
 final categoriesProvider = FutureProvider<List<Category>>((ref) async {
   final api = ref.watch(apiServiceProvider);
   final raw = await api.getCategories();

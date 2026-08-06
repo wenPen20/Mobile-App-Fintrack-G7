@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/services/api_service.dart';
 import '../../../core/services/auth_api_service.dart';
 
+/// Immutable state container for the authentication session.
 class AuthState {
   final String? token;
   final String? error;
@@ -32,6 +33,7 @@ class AuthState {
   }
 }
 
+/// Riverpod Notifier managing login, registration, password reset, and logout.
 class AuthNotifier extends Notifier<AuthState> {
   // Using localhost for emulator/testing
   final String baseUrl = 'http://localhost:8000';

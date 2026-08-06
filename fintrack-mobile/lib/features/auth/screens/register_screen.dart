@@ -5,6 +5,7 @@ import '../../../core/widgets/app_button.dart';
 import '../../../core/widgets/app_text_field.dart';
 import '../../../core/widgets/auth_error_banner.dart';
 
+/// Account registration screen with email, password, and confirmation.
 class RegisterScreen extends ConsumerStatefulWidget {
   const RegisterScreen({super.key});
 

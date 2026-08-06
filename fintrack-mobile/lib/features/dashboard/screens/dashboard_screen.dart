@@ -12,6 +12,7 @@ import 'widgets/recent_transactions.dart';
 
 const _greetingEmojis = ['✨', '⚡', '🚀', '💳', '👋', '📊', '🔥', '🌟'];
 
+/// Main home screen showing financial summary, spending chart, budget health, and recent transactions.
 class DashboardScreen extends ConsumerWidget {
   const DashboardScreen({super.key});
 

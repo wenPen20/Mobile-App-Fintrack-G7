@@ -53,6 +53,7 @@ const List<_NavItem> _navItems = [
   ),
 ];
 
+/// Main bottom navigation bar widget for switching shell tabs.
 class FintrackBottomNavBar extends StatelessWidget {
   /// The route location of the currently active shell branch.
   final String currentLocation;
@@ -118,6 +119,7 @@ class FintrackBottomNavBar extends StatelessWidget {
   }
 }
 
+/// Individual navigation bar item component.
 class _NavBarItem extends StatelessWidget {
   final _NavItem item;
   final bool isActive;
@@ -170,6 +172,7 @@ class _NavBarItem extends StatelessWidget {
   }
 }
 
+/// Center action button component launching the add transaction screen.
 class _CenterAddButton extends StatelessWidget {
   final VoidCallback onTap;
   const _CenterAddButton({required this.onTap});

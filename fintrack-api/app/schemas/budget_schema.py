@@ -3,15 +3,18 @@ from typing import Optional
 from datetime import datetime
 
 class BudgetBase(BaseModel):
+    """Shared fields for budget create and response models."""
     category_id: str = Field(..., description="UUID of the budget category")
     amount_limit: float = Field(..., ge=0, description="Spending limit, must be non-negative")
     month: int = Field(..., ge=1, le=12, description="Month of the budget (1-12)")
     year: int = Field(..., ge=2000, le=2100, description="Year of the budget")
 
 class BudgetCreate(BudgetBase):
+    """Request payload for creating or updating a monthly budget."""
     pass
 
 class BudgetResponse(BudgetBase):
+    """Response model for a budget record with joined category info."""
     id: str
     user_id: str
     category_name: Optional[str] = None

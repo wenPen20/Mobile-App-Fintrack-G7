@@ -19,6 +19,7 @@ import '../providers/transaction_provider.dart';
 import 'widgets/category_avatar.dart';
 import 'package:fintrack_mobile/features/budget/providers/budget_provider.dart';
 
+/// Form screen for creating or editing a transaction record.
 class AddTransactionScreen extends ConsumerStatefulWidget {
   final TransactionModel? existing; // null = add, non-null = edit
   const AddTransactionScreen({super.key, this.existing});

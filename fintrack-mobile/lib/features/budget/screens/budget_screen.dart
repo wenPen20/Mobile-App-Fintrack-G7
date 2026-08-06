@@ -14,6 +14,7 @@ import 'widgets/category_budget_tile.dart';
 import 'widgets/monthly_budget_card.dart';
 import '../../profile/providers/category_provider.dart';
 
+/// Monthly budget overview showing category limits, spending, and remaining amounts.
 class BudgetScreen extends ConsumerStatefulWidget {
   const BudgetScreen({super.key});
 

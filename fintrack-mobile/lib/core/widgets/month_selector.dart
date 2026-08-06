@@ -18,6 +18,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:fintrack_mobile/core/constants/app_colors.dart';
 
+/// Interactive horizontal scroll strip for selecting a target month.
 class MonthSelector extends StatefulWidget {
   final List<DateTime> months; // the months to show, oldest -> newest
   final DateTime selectedMonth; // which one is currently active

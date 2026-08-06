@@ -19,6 +19,7 @@ import 'widgets/transaction_summary_bar.dart';
 import 'widgets/day_section_header.dart';
 import 'widgets/transaction_list_item.dart';
 
+/// Monthly transaction list with filtering, sorting, and swipe-to-delete.
 class TransactionsScreen extends ConsumerStatefulWidget {
   const TransactionsScreen({super.key});
 

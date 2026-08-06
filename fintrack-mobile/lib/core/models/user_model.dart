@@ -1,3 +1,4 @@
+/// Lightweight representation of an authenticated user for local state.
 class UserModel {
   final String id;
   final String email;

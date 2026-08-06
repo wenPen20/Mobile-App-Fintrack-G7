@@ -6,6 +6,7 @@ import '../../../core/widgets/app_text_field.dart';
 import '../../../core/widgets/auth_error_banner.dart';
 import 'login_screen.dart';
 
+/// Screen for entering the reset code and setting a new password.
 class ResetPasswordScreen extends ConsumerStatefulWidget {
   final String? email;
   final String? code;

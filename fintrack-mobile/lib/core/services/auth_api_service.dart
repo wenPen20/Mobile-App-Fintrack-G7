@@ -1,6 +1,10 @@
+// HTTP client for unauthenticated auth endpoints (login, register, password reset).
+// Used by AuthNotifier before a JWT token is available.
+
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
+/// API service wrapper for authentication operations.
 class AuthApiService {
   final String baseUrl;
   final String? token;

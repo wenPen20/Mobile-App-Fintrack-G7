@@ -16,7 +16,7 @@ Built and tested against Flutter 3.41.9 stable with Dart 3.11.5. `pubspec.yaml` 
 
 ## Point the app at the backend first
 
-The API base URL is hardcoded in **two** files, and both have to agree:
+The API base URL is hardcoded in **two** files, and both must match:
 
 - [lib/core/services/api_service.dart:338](lib/core/services/api_service.dart#L338)
 - [lib/features/auth/providers/auth_provider.dart:37](lib/features/auth/providers/auth_provider.dart#L37)

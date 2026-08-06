@@ -373,7 +373,7 @@ With the backend running and the base URL set correctly:
 2. **Log in.** You get a Supabase JWT back, which the client stores and sends as `Authorization: Bearer <token>` on every later request.
 3. **Complete onboarding.** Name, monthly income, fixed expenses, income frequency, and risk appetite are written to the `profiles` table.
 4. **Land on the dashboard.** It is empty until you add something.
-5. **Add a transaction.** The first time the app loads categories, the backend copies the fourteen global template categories into rows owned by your user. If the picker is empty, your seed from [section 4.2](#42-seed-the-default-categories) did not run.
+5. **Add a transaction.** The first time the app loads categories, the backend copies the fourteen global template categories into rows owned by the user. If the picker is empty, the seed script from [section 4.2](#42-seed-the-default-categories) was not run.
 6. **Open the AI assistant** from the floating button and ask something like "how much did I spend this month?". The agent calls its read-only tools against your real data and answers in Ringgit. Chat history persists per session.
 
 To confirm the data landed, open the Supabase **Table Editor** and look at `transactions` and `ai_chat_messages`.
